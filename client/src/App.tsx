@@ -1,10 +1,14 @@
 import "./App.css";
+import { Outlet } from "react-router-dom";
+import ThemeController from "./components/ThemeController";
+import { UserProvider } from "./context/UserContext";
 
 function App() {
   return (
-    <>
-      <h1 className="logo">JS Monorepo</h1>
-    </>
+    <UserProvider>
+      <ThemeController />
+      <Outlet />
+    </UserProvider>
   );
 }
 
