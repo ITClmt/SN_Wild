@@ -4,7 +4,7 @@ export default function ThemeController() {
   const { isDark, toggle } = useTheme();
 
   return (
-    <div>
+    <div className="fixed top-0 right-0">
       <label className="swap swap-rotate">
         {/* this hidden checkbox controls the state */}
         <input

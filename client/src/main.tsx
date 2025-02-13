@@ -9,6 +9,10 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import App from "./App";
 import Login from "./pages/Login";
 import Profile from "./pages/Profile";
+import { UserProvider } from "./context/UserContext";
+import FirstPage from "./pages/FirstPage";
+import { ProtectedRoute } from "./routes/ProtectedRoute";
+import Signup from "./pages/Signup";
 
 // Import additional components for new routes
 // Try creating these components in the "pages" folder
@@ -26,15 +30,28 @@ const router = createBrowserRouter([
     element: <App />, // Renders the App component for the home page
     children: [
       {
-        path: "/login",
-        element: <Login />,
+        path: "/",
+        element: <FirstPage />,
       },
       {
         path: "/profile",
-        element: <Profile />,
+        element: (
+          <ProtectedRoute>
+            <Profile />
+          </ProtectedRoute>
+        ),
       },
     ],
   },
+  {
+    path: "/login",
+    element: <Login />,
+  },
+  {
+    path: "/signup",
+    element: <Signup />,
+  },
+
   // Try adding a new route! For example, "/about" with an About component
 ]);
 
@@ -49,7 +66,9 @@ if (rootElement == null) {
 // Render the app inside the root element
 createRoot(rootElement).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <UserProvider>
+      <RouterProvider router={router} />
+    </UserProvider>
   </StrictMode>,
 );
 

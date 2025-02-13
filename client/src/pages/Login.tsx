@@ -1,9 +1,11 @@
 import axios from "axios";
 import { useState } from "react";
 import { useForm, type SubmitHandler } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import type { AxiosError } from "axios";
 import { useUser } from "../context/UserContext";
+import ThemeController from "../components/ThemeController";
+
 interface IFormInput {
   email: string;
   password: string;
@@ -31,8 +33,8 @@ export default function Login() {
         },
       );
 
-      // Redirige vers une page protégée
-      login(response.data.token); // Connexion via le contexte
+      // Wait for login to complete before navigating
+      await login(response.data.token);
       navigate("/profile");
     } catch (error) {
       if ((error as AxiosError)?.response?.status === 401) {
@@ -43,8 +45,27 @@ export default function Login() {
     }
   };
 
+  const { isAuthenticated } = useUser();
+
+  if (isAuthenticated) {
+    return <Navigate to="/profile" replace />;
+  }
+
   return (
     <section className="flex flex-col items-center justify-center h-screen font-poppins">
+      <ThemeController />
+      <div className="fixed top-0 left-0 p-4 gap-4 flex">
+        <Link to="/signup">
+          <button type="button" className="btn btn-outline btn-xs">
+            Créer un compte
+          </button>
+        </Link>
+        <Link to="/">
+          <button type="button" className="btn btn-outline btn-xs">
+            Retour
+          </button>
+        </Link>
+      </div>
       <h1 className="text-5xl font-oswald font-bold mb-10">Connectez-vous</h1>
       <article className="flex flex-col items-center justify-center ">
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -80,7 +101,7 @@ export default function Login() {
 
             {error && <p className="text-error">{error}</p>}
 
-            <button type="submit" className="btn btn-neutral mt-4">
+            <button type="submit" className="btn btn-primary mt-4">
               Login
             </button>
           </fieldset>

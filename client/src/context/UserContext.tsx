@@ -7,69 +7,58 @@ import {
   useEffect,
 } from "react";
 
-interface User {
-  id: string;
-  email: string;
-  username: string;
-}
-
 interface UserContextType {
-  user: User | null;
-  setUser: (user: User | null) => void;
+  user: UserType | null;
   isAuthenticated: boolean;
+  login: (token: string) => Promise<void>;
   logout: () => void;
-  login: (token: string) => void;
-}
-
-interface UserProviderProps {
-  children: ReactNode;
 }
 
 const UserContext = createContext<UserContextType | null>(null);
 
-export const UserProvider = ({ children }: UserProviderProps) => {
-  const [user, setUser] = useState<User | null>(null);
+export const UserProvider = ({ children }: { children: ReactNode }) => {
+  const [user, setUser] = useState<UserType | null>(null);
+  const baseUrl = import.meta.env.VITE_API_URL || "http://localhost:3310";
 
-  // Vérifie le token au chargement de l'application
   useEffect(() => {
     const token = localStorage.getItem("token");
-    if (token) {
-      axios
-        .get("http://localhost:3310/api/user/me", {
-          headers: { Authorization: `Bearer ${token}` },
-        })
-        .then((response) => setUser(response.data.user))
-        .catch(() => {
-          localStorage.removeItem("token");
-        });
-    }
+    if (token) fetchUser(token);
   }, []);
 
-  // Fonction pour connecter l'utilisateur
-  const login = (token: string) => {
-    localStorage.setItem("token", token);
-    axios
-      .get("http://localhost:3310/api/user/me", {
+  const fetchUser = async (token: string) => {
+    try {
+      const { data } = await axios.get(`${baseUrl}/api/users/me`, {
         headers: { Authorization: `Bearer ${token}` },
-      })
-      .then((response) => setUser(response.data.user));
+      });
+      setUser(data);
+    } catch {
+      localStorage.removeItem("token");
+      setUser(null);
+    }
   };
 
-  // Fonction pour déconnecter l'utilisateur
+  const login = async (token: string) => {
+    localStorage.setItem("token", token);
+    await fetchUser(token);
+  };
+
   const logout = () => {
     localStorage.removeItem("token");
     setUser(null);
   };
 
-  const value = {
-    user,
-    setUser,
-    isAuthenticated: !!user,
-    logout,
-    login,
-  };
-
-  return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
+  return (
+    <UserContext.Provider
+      value={{
+        user,
+        isAuthenticated: !!user,
+        login,
+        logout,
+      }}
+    >
+      {children}
+    </UserContext.Provider>
+  );
 };
 
 // Custom hook to use the user context
