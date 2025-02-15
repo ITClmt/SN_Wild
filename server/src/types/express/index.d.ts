@@ -1,5 +1,5 @@
-import type { JwtPayload } from "../../modules/item/auth/authMiddleware";
-import type { User } from "../../modules/item/users/usersRepository";
+import type { JwtPayload } from "../../modules/auth/authMiddleware";
+import type { User } from "../../modules/users/usersRepository";
 
 declare global {
   namespace Express {

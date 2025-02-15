@@ -1,5 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useUser } from "../context/UserContext";
+import UserPosts from "../components/UserPosts";
 
 export default function Profile() {
   const { user, logout } = useUser();
@@ -54,6 +55,7 @@ export default function Profile() {
           </div>
         </div>
       </div>
+      <UserPosts user={user} />
     </div>
   );
 }

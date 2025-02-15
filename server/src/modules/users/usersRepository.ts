@@ -1,4 +1,4 @@
-import db from "../../../../database/client";
+import db from "../../../database/client";
 import type { RowDataPacket, ResultSetHeader } from "mysql2";
 
 interface User extends RowDataPacket {
