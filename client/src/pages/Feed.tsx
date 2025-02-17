@@ -91,7 +91,7 @@ export default function Feed() {
   }
 
   return (
-    <main className="min-h-screen bg-base-200">
+    <main className="min-h-screen bg-base-200 mt-16">
       <div className="mx-auto max-w-2xl p-4">
         <h1 className="text-3xl font-bold">Feed</h1>
       </div>

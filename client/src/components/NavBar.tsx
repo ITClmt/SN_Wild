@@ -5,7 +5,7 @@ import { useUser } from "../context/UserContext";
 export default function NavBar() {
   const { isAuthenticated, user } = useUser();
   return (
-    <nav className="navbar">
+    <nav className="navbar fixed top-0 left-0 right-0 z-50 bg-base-100">
       <div className="navbar-start">
         <Link
           to={isAuthenticated ? "/feed" : "/"}
