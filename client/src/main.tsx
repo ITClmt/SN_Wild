@@ -13,6 +13,7 @@ import { UserProvider } from "./context/UserContext";
 import FirstPage from "./pages/FirstPage";
 import { ProtectedRoute } from "./routes/ProtectedRoute";
 import Signup from "./pages/Signup";
+import Feed from "./pages/Feed";
 
 // Import additional components for new routes
 // Try creating these components in the "pages" folder
@@ -40,6 +41,10 @@ const router = createBrowserRouter([
             <Profile />
           </ProtectedRoute>
         ),
+      },
+      {
+        path: "/feed",
+        element: <Feed />,
       },
     ],
   },

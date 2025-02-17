@@ -73,8 +73,15 @@ export const editUserProfileController: RequestHandler = async (req, res) => {
       res.status(401).json({ message: "User not authenticated" });
       return;
     }
-    const { username } = req.body;
-    const response = await editUserProfile(req.user.id, username);
+    const { username, email, bio, profile_picture, website } = req.body;
+    const response = await editUserProfile(
+      req.user.id,
+      username,
+      email,
+      bio,
+      profile_picture,
+      website,
+    );
     res.json(response);
   } catch (error: unknown) {
     if (error instanceof Error) {

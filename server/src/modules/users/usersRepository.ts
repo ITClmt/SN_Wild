@@ -5,6 +5,9 @@ interface User extends RowDataPacket {
   id: number;
   email: string;
   username: string;
+  bio: string;
+  profile_picture: string;
+  website: string;
   password_hash: string;
   created_at: Date;
 }
@@ -20,7 +23,7 @@ export const findUserByEmail = async (email: string): Promise<User | null> => {
 // 🔹 Récupérer un utilisateur par son ID
 export const findUserById = async (id: number): Promise<User | null> => {
   const [rows] = await db.query<User[]>(
-    "SELECT id, email, username FROM users WHERE id = ?",
+    "SELECT id, email, username, bio, profile_picture, website FROM users WHERE id = ?",
     [id],
   );
   return rows.length ? rows[0] : null;
@@ -42,9 +45,16 @@ export const createUser = async (
 // 🔹 Mettre à jour un utilisateur
 export const updateUser = async (
   id: number,
-  username: string,
+  username?: string,
+  email?: string,
+  bio?: string,
+  profile_picture?: string,
+  website?: string,
 ): Promise<void> => {
-  await db.query("UPDATE users SET username = ? WHERE id = ?", [username, id]);
+  await db.query(
+    "UPDATE users SET username = ?, email = ?, bio = ?, profile_picture = ?, website = ? WHERE id = ?",
+    [username, email, bio, profile_picture, website, id],
+  );
 };
 
 // 🔹 Supprimer un utilisateur
@@ -55,7 +65,7 @@ export const deleteUser = async (id: number): Promise<void> => {
 // 🔹 Récupérer tous les utilisateurs (BREAD - Browse)
 export const getAllUsers = async (): Promise<User[]> => {
   const [rows] = await db.query<User[]>(
-    "SELECT id, email, username, created_at FROM users",
+    "SELECT id, email, username, bio, profile_picture, website, created_at FROM users",
   );
   return rows;
 };

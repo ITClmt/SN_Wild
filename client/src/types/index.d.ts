@@ -1,12 +1,17 @@
 interface UserType {
   username: string;
-  id: string;
+  id: number;
   email: string;
   display_name?: string;
   bio?: string;
-  profile_image_url?: string;
-  location?: string;
+  profile_picture?: string;
   website?: string;
-  followers_count: number;
-  following_count: number;
+}
+
+interface PostType {
+  id: number;
+  content: string;
+  created_at: string;
+  updated_at: string;
+  user_id: number;
 }

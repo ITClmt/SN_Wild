@@ -17,7 +17,7 @@ export const signupUser = async (
 ) => {
   const existingUser = await findUserByEmail(email);
   if (existingUser) {
-    throw new Error("Email already exists.");
+    throw new Error("Email déjà utilisé.");
   }
 
   const hashedPassword = await bcrypt.hash(password, 10);
@@ -28,14 +28,14 @@ export const signupUser = async (
     { expiresIn: "1h" },
   );
 
-  return { message: "User registered successfully!", token };
+  return { message: "Inscription réussie", token };
 };
 
 // 🔹 Connexion (Login)
 export const loginUser = async (email: string, password: string) => {
   const user = await findUserByEmail(email);
   if (!user || !(await bcrypt.compare(password, user.password_hash))) {
-    throw new Error("Invalid email or password.");
+    throw new Error("Email ou mot de passe invalide.");
   }
 
   const token = jwt.sign(
@@ -44,7 +44,7 @@ export const loginUser = async (email: string, password: string) => {
     { expiresIn: "1h" },
   );
 
-  return { message: "Login successful", token };
+  return { message: "Connexion réussie", token };
 };
 
 // 🔹 Voir les utilisateurs (Browse - Admin uniquement)
@@ -62,13 +62,20 @@ export const getUserProfile = async (userId: number) => {
 };
 
 // 🔹 Modifier son profil (Edit)
-export const editUserProfile = async (userId: number, username: string) => {
-  await updateUser(userId, username);
-  return { message: "Profile updated successfully!" };
+export const editUserProfile = async (
+  userId: number,
+  username?: string,
+  email?: string,
+  bio?: string,
+  profile_picture?: string,
+  website?: string,
+) => {
+  await updateUser(userId, username, email, bio, profile_picture, website);
+  return { message: "Profile mis à jour avec succès !" };
 };
 
 // 🔹 Supprimer son compte (Delete)
 export const removeUser = async (userId: number) => {
   await deleteUser(userId);
-  return { message: "Account deleted successfully." };
+  return { message: "Compte supprimé avec succès." };
 };

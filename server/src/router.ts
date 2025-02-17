@@ -26,7 +26,7 @@ router.post("/api/auth/signup", signupController);
 router.post("/api/auth/login", loginController);
 
 // 🔹 User routes
-router.get("/api/users", authenticateToken, browseUsersController);
+router.get("/api/users", browseUsersController);
 router.get("/api/users/me", authenticateToken, getUserProfileController);
 router.put("/api/users/me", authenticateToken, editUserProfileController);
 router.delete("/api/users/me", authenticateToken, removeUserController);

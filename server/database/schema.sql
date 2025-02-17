@@ -6,7 +6,16 @@ CREATE TABLE users (
   email VARCHAR(255) NOT NULL UNIQUE,
   username VARCHAR(50) NOT NULL,
   password_hash VARCHAR(255) NOT NULL,
+  bio TEXT DEFAULT NULL,
+  profile_picture VARCHAR(255) DEFAULT NULL,
+  website VARCHAR(255) DEFAULT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+INSERT INTO users (email, username, password_hash) VALUES (
+  'admin@example.com',
+  'admin',
+  '$2b$10$ZLw7fJpVWw9zACa9vhWOm.lBeFi/clZ.pltSAIyVZJi6rbecE9gTa'
 );
 
 CREATE TABLE posts (
