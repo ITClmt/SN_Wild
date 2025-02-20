@@ -1,18 +1,11 @@
 import type { RequestHandler } from "express";
-import {
-  signupUser,
-  loginUser,
-  browseUsers,
-  getUserProfile,
-  editUserProfile,
-  removeUser,
-} from "./usersActions";
+import usersActions from "./usersActions";
 
 // 🔹 Inscription
-export const signupController: RequestHandler = async (req, res) => {
+const signupController: RequestHandler = async (req, res) => {
   try {
     const { email, username, password } = req.body;
-    const response = await signupUser(email, username, password);
+    const response = await usersActions.signupUser(email, username, password);
     res.status(201).json(response);
   } catch (error: unknown) {
     if (error instanceof Error) {
@@ -24,10 +17,10 @@ export const signupController: RequestHandler = async (req, res) => {
 };
 
 // 🔹 Connexion
-export const loginController: RequestHandler = async (req, res) => {
+const loginController: RequestHandler = async (req, res) => {
   try {
     const { email, password } = req.body;
-    const response = await loginUser(email, password);
+    const response = await usersActions.loginUser(email, password);
     res.status(200).json(response);
   } catch (error: unknown) {
     if (error instanceof Error) {
@@ -39,9 +32,9 @@ export const loginController: RequestHandler = async (req, res) => {
 };
 
 // 🔹 Voir tous les utilisateurs (Admin seulement)
-export const browseUsersController: RequestHandler = async (req, res) => {
+const browseUsersController: RequestHandler = async (req, res) => {
   try {
-    const users = await browseUsers();
+    const users = await usersActions.browseUsers();
     res.json(users);
   } catch (error) {
     res.status(500).json({ message: "Server error" });
@@ -49,13 +42,13 @@ export const browseUsersController: RequestHandler = async (req, res) => {
 };
 
 // 🔹 Voir son profil
-export const getUserProfileController: RequestHandler = async (req, res) => {
+const getUserProfileController: RequestHandler = async (req, res) => {
   try {
     if (!req.user) {
       res.status(401).json({ message: "User not authenticated" });
       return;
     }
-    const user = await getUserProfile(req.user.id);
+    const user = await usersActions.getUserProfile(req.user.id);
     res.json(user);
   } catch (error: unknown) {
     if (error instanceof Error) {
@@ -67,14 +60,14 @@ export const getUserProfileController: RequestHandler = async (req, res) => {
 };
 
 // 🔹 Modifier son profil
-export const editUserProfileController: RequestHandler = async (req, res) => {
+const editUserProfileController: RequestHandler = async (req, res) => {
   try {
     if (!req.user) {
       res.status(401).json({ message: "User not authenticated" });
       return;
     }
     const { username, email, bio, profile_picture, website } = req.body;
-    const response = await editUserProfile(
+    const response = await usersActions.editUserProfile(
       req.user.id,
       username,
       email,
@@ -93,13 +86,13 @@ export const editUserProfileController: RequestHandler = async (req, res) => {
 };
 
 // 🔹 Supprimer son compte
-export const removeUserController: RequestHandler = async (req, res) => {
+const removeUserController: RequestHandler = async (req, res) => {
   try {
     if (!req.user) {
       res.status(401).json({ message: "User not authenticated" });
       return;
     }
-    const response = await removeUser(req.user.id);
+    const response = await usersActions.removeUser(req.user.id);
     res.json(response);
   } catch (error: unknown) {
     if (error instanceof Error) {
@@ -108,4 +101,13 @@ export const removeUserController: RequestHandler = async (req, res) => {
       res.status(500).json({ message: "An unknown error occurred" });
     }
   }
+};
+
+export default {
+  signupController,
+  loginController,
+  browseUsersController,
+  getUserProfileController,
+  editUserProfileController,
+  removeUserController,
 };

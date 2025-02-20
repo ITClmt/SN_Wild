@@ -1,20 +1,5 @@
 import express from "express";
-import {
-  signupController,
-  loginController,
-  browseUsersController,
-  getUserProfileController,
-  editUserProfileController,
-  removeUserController,
-} from "./modules/users/usersController";
 import { authenticateToken } from "./modules/auth/authMiddleware";
-import {
-  browsePostsController,
-  readPostController,
-  editPostController,
-  addPostController,
-  removePostController,
-} from "./modules/posts/postController";
 const router = express.Router();
 
 /* ************************************************************************* */
@@ -22,21 +7,45 @@ const router = express.Router();
 /* ************************************************************************* */
 
 // 🔹 Auth routes
-router.post("/api/auth/signup", signupController);
-router.post("/api/auth/login", loginController);
+import usersController from "./modules/users/usersController";
+
+router.post("/api/auth/signup", usersController.signupController);
+router.post("/api/auth/login", usersController.loginController);
 
 // 🔹 User routes
-router.get("/api/users", browseUsersController);
-router.get("/api/users/me", authenticateToken, getUserProfileController);
-router.put("/api/users/me", authenticateToken, editUserProfileController);
-router.delete("/api/users/me", authenticateToken, removeUserController);
+
+router.get("/api/users", usersController.browseUsersController);
+router.get(
+  "/api/users/me",
+  authenticateToken,
+  usersController.getUserProfileController,
+);
+router.put(
+  "/api/users/me",
+  authenticateToken,
+  usersController.editUserProfileController,
+);
+router.delete(
+  "/api/users/me",
+  authenticateToken,
+  usersController.removeUserController,
+);
 
 // 🔹 Post routes
-router.get("/api/posts", browsePostsController);
-router.get("/api/posts/:id", readPostController);
-router.post("/api/posts", authenticateToken, addPostController);
-router.put("/api/posts/:id", authenticateToken, editPostController);
-router.delete("/api/posts/:id", authenticateToken, removePostController);
+import postController from "./modules/posts/postController";
+router.get("/api/posts", postController.browsePostsController);
+router.get("/api/posts/:id", postController.readPostController);
+router.post("/api/posts", authenticateToken, postController.addPostController);
+router.put(
+  "/api/posts/:id",
+  authenticateToken,
+  postController.editPostController,
+);
+router.delete(
+  "/api/posts/:id",
+  authenticateToken,
+  postController.removePostController,
+);
 
 // 🔹 Item routes
 // Define item-related routes

@@ -12,60 +12,61 @@ interface User extends RowDataPacket {
   created_at: Date;
 }
 
-// 🔹 Récupérer un utilisateur par son email
-export const findUserByEmail = async (email: string): Promise<User | null> => {
-  const [rows] = await db.query<User[]>("SELECT * FROM users WHERE email = ?", [
-    email,
-  ]);
-  return rows.length ? rows[0] : null;
-};
+class UsersRepository {
+  // 🔹 Récupérer un utilisateur par son email
+  async findUserByEmail(email: string) {
+    const [rows] = await db.query<User[]>(
+      "SELECT * FROM users WHERE email = ?",
+      [email],
+    );
+    return rows.length ? rows[0] : null;
+  }
 
-// 🔹 Récupérer un utilisateur par son ID
-export const findUserById = async (id: number): Promise<User | null> => {
-  const [rows] = await db.query<User[]>(
-    "SELECT id, email, username, bio, profile_picture, website FROM users WHERE id = ?",
-    [id],
-  );
-  return rows.length ? rows[0] : null;
-};
+  // 🔹 Récupérer un utilisateur par son ID
+  async findUserById(id: number) {
+    const [rows] = await db.query<User[]>(
+      "SELECT id, email, username, bio, profile_picture, website FROM users WHERE id = ?",
+      [id],
+    );
+    return rows.length ? rows[0] : null;
+  }
 
-// 🔹 Ajouter un utilisateur
-export const createUser = async (
-  email: string,
-  username: string,
-  passwordHash: string,
-): Promise<number> => {
-  const [result] = await db.query<ResultSetHeader>(
-    "INSERT INTO users (email, username, password_hash) VALUES (?, ?, ?)",
-    [email, username, passwordHash],
-  );
-  return result.insertId;
-};
+  // 🔹 Ajouter un utilisateur
+  async createUser(email: string, username: string, passwordHash: string) {
+    const [result] = await db.query<ResultSetHeader>(
+      "INSERT INTO users (email, username, password_hash) VALUES (?, ?, ?)",
+      [email, username, passwordHash],
+    );
+    return result.insertId;
+  }
 
-// 🔹 Mettre à jour un utilisateur
-export const updateUser = async (
-  id: number,
-  username?: string,
-  email?: string,
-  bio?: string,
-  profile_picture?: string,
-  website?: string,
-): Promise<void> => {
-  await db.query(
-    "UPDATE users SET username = ?, email = ?, bio = ?, profile_picture = ?, website = ? WHERE id = ?",
-    [username, email, bio, profile_picture, website, id],
-  );
-};
+  // 🔹 Mettre à jour un utilisateur
+  async updateUser(
+    id: number,
+    username?: string,
+    email?: string,
+    bio?: string,
+    profile_picture?: string,
+    website?: string,
+  ) {
+    await db.query(
+      "UPDATE users SET username = ?, email = ?, bio = ?, profile_picture = ?, website = ? WHERE id = ?",
+      [username, email, bio, profile_picture, website, id],
+    );
+  }
 
-// 🔹 Supprimer un utilisateur
-export const deleteUser = async (id: number): Promise<void> => {
-  await db.query("DELETE FROM users WHERE id = ?", [id]);
-};
+  // 🔹 Supprimer un utilisateur
+  async deleteUser(id: number): Promise<void> {
+    await db.query("DELETE FROM users WHERE id = ?", [id]);
+  }
 
-// 🔹 Récupérer tous les utilisateurs (BREAD - Browse)
-export const getAllUsers = async (): Promise<User[]> => {
-  const [rows] = await db.query<User[]>(
-    "SELECT id, email, username, bio, profile_picture, website, created_at FROM users",
-  );
-  return rows;
-};
+  // 🔹 Récupérer tous les utilisateurs (BREAD - Browse)
+  async getAllUsers() {
+    const [rows] = await db.query<User[]>(
+      "SELECT id, email, username, bio, profile_picture, website, created_at FROM users",
+    );
+    return rows;
+  }
+}
+
+export default new UsersRepository();

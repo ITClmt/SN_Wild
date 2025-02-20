@@ -7,21 +7,21 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 
 // Import the main app component
 import App from "./App";
-import Login from "./pages/Login";
-import Profile from "./pages/Profile";
-import { UserProvider } from "./context/UserContext";
-import FirstPage from "./pages/FirstPage";
-import { ProtectedRoute } from "./routes/ProtectedRoute";
-import Signup from "./pages/Signup";
-import Feed from "./pages/Feed";
 
 // Import additional components for new routes
 // Try creating these components in the "pages" folder
 
-// import About from "./pages/About";
-// import Contact from "./pages/Contact";
+import FirstPage from "./pages/FirstPage";
+import Signup from "./pages/Signup";
+import Feed from "./pages/Feed";
+import UserProfile from "./pages/UserProfile";
+import Login from "./pages/Login";
+import Profile from "./pages/Profile";
 
 /* ************************************************************************* */
+
+import { UserProvider } from "./context/UserContext";
+import { ProtectedRoute } from "./routes/ProtectedRoute";
 
 // Create router configuration with routes
 // You can add more routes as you build out your app!
@@ -45,6 +45,10 @@ const router = createBrowserRouter([
       {
         path: "/feed",
         element: <Feed />,
+      },
+      {
+        path: "/profile/:id",
+        element: <UserProfile />,
       },
     ],
   },

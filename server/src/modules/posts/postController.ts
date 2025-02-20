@@ -1,16 +1,10 @@
 import type { RequestHandler } from "express";
-import {
-  browsePosts,
-  readPost,
-  addPost,
-  editPost,
-  removePost,
-} from "./postActions";
+import postActions from "./postActions";
 
 // 🔹 Récupérer tous les posts
-export const browsePostsController: RequestHandler = async (_req, res) => {
+const browsePostsController: RequestHandler = async (_req, res) => {
   try {
-    const posts = await browsePosts();
+    const posts = await postActions.browsePosts();
     res.json(posts);
   } catch (error) {
     res.status(500).json({ message: "Server error" });
@@ -18,9 +12,9 @@ export const browsePostsController: RequestHandler = async (_req, res) => {
 };
 
 // 🔹 Récupérer un post spécifique
-export const readPostController: RequestHandler = async (req, res) => {
+const readPostController: RequestHandler = async (req, res) => {
   try {
-    const post = await readPost(Number(req.params.id));
+    const post = await postActions.readPost(Number(req.params.id));
     res.json(post);
   } catch (error) {
     if (error instanceof Error) {
@@ -32,13 +26,13 @@ export const readPostController: RequestHandler = async (req, res) => {
 };
 
 // 🔹 Ajouter un post
-export const addPostController: RequestHandler = async (req, res) => {
+const addPostController: RequestHandler = async (req, res) => {
   try {
     if (!req.user) {
       res.status(401).json({ message: "Unauthorized" });
       return;
     }
-    const response = await addPost(req.user.id, req.body.content);
+    const response = await postActions.addPost(req.user.id, req.body.content);
     res.status(201).json(response);
   } catch (error) {
     if (error instanceof Error) {
@@ -50,13 +44,13 @@ export const addPostController: RequestHandler = async (req, res) => {
 };
 
 // 🔹 Modifier un post
-export const editPostController: RequestHandler = async (req, res) => {
+const editPostController: RequestHandler = async (req, res) => {
   try {
     if (!req.user) {
       res.status(401).json({ message: "Unauthorized" });
       return;
     }
-    const response = await editPost(
+    const response = await postActions.editPost(
       Number(req.params.id),
       req.user.id,
       req.body.content,
@@ -72,13 +66,16 @@ export const editPostController: RequestHandler = async (req, res) => {
 };
 
 // 🔹 Supprimer un post
-export const removePostController: RequestHandler = async (req, res) => {
+const removePostController: RequestHandler = async (req, res) => {
   try {
     if (!req.user) {
       res.status(401).json({ message: "Unauthorized" });
       return;
     }
-    const response = await removePost(Number(req.params.id), req.user.id);
+    const response = await postActions.removePost(
+      Number(req.params.id),
+      req.user.id,
+    );
     res.json(response);
   } catch (error) {
     if (error instanceof Error) {
@@ -87,4 +84,12 @@ export const removePostController: RequestHandler = async (req, res) => {
       res.status(400).json({ message: "An unknown error occurred" });
     }
   }
+};
+
+export default {
+  browsePostsController,
+  readPostController,
+  addPostController,
+  editPostController,
+  removePostController,
 };
