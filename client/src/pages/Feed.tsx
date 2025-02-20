@@ -130,8 +130,8 @@ export default function Feed() {
             <div className="card-body p-4">
               {/* Post Header with User Info */}
               <div className="flex justify-between items-start">
-                <Link to={`/profile/${post.user_id}`}>
-                  <div className="flex gap-3 items-center">
+                <div className="flex gap-3 items-center">
+                  <Link to={`/profile/${post.user_id}`}>
                     <figure className="avatar w-12 h-12 rounded-full">
                       <img
                         src={
@@ -143,6 +143,8 @@ export default function Feed() {
                         alt="User avatar"
                       />
                     </figure>
+                  </Link>
+                  <Link to={`/profile/${post.user_id}`}>
                     <div>
                       <h3 className="font-semibold text-sm">
                         {otherUsers.find(
@@ -157,27 +159,27 @@ export default function Feed() {
                         })}
                       </time>
                     </div>
-                  </div>
+                  </Link>
+                </div>
 
-                  {user?.id === Number(post.user_id) && (
-                    <details className="dropdown">
-                      <summary className="btn btn-ghost btn-xs">
-                        <BsThreeDots />
-                      </summary>
-                      <ul className="menu dropdown-content bg-base-100 rounded-box z-1 w-24 p-2 shadow-sm">
-                        <li>
-                          <button
-                            type="button"
-                            className="btn btn-ghost btn-xs text-red-500"
-                            onClick={() => handleDelete(post.id)}
-                          >
-                            Supprimer
-                          </button>
-                        </li>
-                      </ul>
-                    </details>
-                  )}
-                </Link>
+                {user?.id === Number(post.user_id) && (
+                  <details className="dropdown">
+                    <summary className="btn btn-ghost btn-xs">
+                      <BsThreeDots />
+                    </summary>
+                    <ul className="menu dropdown-content bg-base-100 rounded-box z-1 w-24 p-2 shadow-sm">
+                      <li>
+                        <button
+                          type="button"
+                          className="btn btn-ghost btn-xs text-red-500"
+                          onClick={() => handleDelete(post.id)}
+                        >
+                          Supprimer
+                        </button>
+                      </li>
+                    </ul>
+                  </details>
+                )}
               </div>
 
               {/* Post Content */}

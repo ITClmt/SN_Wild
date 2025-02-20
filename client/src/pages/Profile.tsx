@@ -241,6 +241,7 @@ export default function Profile() {
             </dialog>
 
             {/* Posts Section */}
+            <div className="divider mt-8">Publications</div>
             <div className="mt-8">
               <UserPosts user={user} />
             </div>

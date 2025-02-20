@@ -162,7 +162,7 @@ export default function UserPosts({ user }: { user: UserType }) {
             </div>
           </dialog>
         </div>
-        <h2 className="text-2xl font-bold">Aucun post trouvé</h2>
+        <p className="text-base-content/70 mt-4">Aucun post trouvé</p>
       </div>
     );
   }
