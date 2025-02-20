@@ -239,7 +239,7 @@ export default function UserPosts({ user }: { user: UserType }) {
                 <summary className="btn btn-ghost btn-xs">
                   <BsThreeDots />
                 </summary>
-                <ul className="menu dropdown-content bg-base-100 rounded-box z-1 w-24 p-2 shadow-sm">
+                <ul className="menu dropdown-content bg-base-100 rounded-box z-1 w-24 p-2 shadow-sm right-0">
                   <li>
                     <button
                       type="button"

@@ -100,14 +100,16 @@ export default function Feed() {
           className="flex items-center justify-between bg-base-100 rounded-lg p-4"
           onSubmit={handleSubmit(onSubmit)}
         >
-          <img
-            src={
-              user?.profile_picture ||
-              "https://cdn.pixabay.com/photo/2022/06/05/07/04/person-7243410_1280.png"
-            }
-            alt={user?.username || "User"}
-            className="w-12 md:w-16 rounded-full mr-4"
-          />
+          <Link to={"/profile"} className="mr-4">
+            <img
+              src={
+                user?.profile_picture ||
+                "https://cdn.pixabay.com/photo/2022/06/05/07/04/person-7243410_1280.png"
+              }
+              alt={user?.username || "User"}
+              className="w-12 md:w-16 rounded-full"
+            />
+          </Link>
 
           <textarea
             placeholder="What's on your mind?"
@@ -167,7 +169,7 @@ export default function Feed() {
                     <summary className="btn btn-ghost btn-xs">
                       <BsThreeDots />
                     </summary>
-                    <ul className="menu dropdown-content bg-base-100 rounded-box z-1 w-24 p-2 shadow-sm">
+                    <ul className="menu dropdown-content bg-base-100 rounded-box z-1 shadow-sm right-0">
                       <li>
                         <button
                           type="button"
