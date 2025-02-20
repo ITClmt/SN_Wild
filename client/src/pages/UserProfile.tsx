@@ -1,6 +1,7 @@
-import { Link, useLoaderData } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import { useState, useEffect } from "react";
+import axios from "axios";
 import OtherUserPosts from "../components/OtherUserPosts";
-import { useUser } from "../context/UserContext";
 
 interface UserProfileData {
   id: number;
@@ -12,23 +13,43 @@ interface UserProfileData {
 }
 
 export default function UserProfile() {
-  const user = useLoaderData() as UserProfileData;
-  const { isAuthenticated } = useUser();
-  if (!isAuthenticated) {
+  const { id } = useParams();
+  const [user, setUser] = useState<UserProfileData | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const { data } = await axios.get(
+          `${import.meta.env.VITE_API_URL}/api/users`,
+        );
+        const foundUser = data.find(
+          (u: UserProfileData) => u.id === Number(id),
+        );
+        if (!foundUser) {
+          throw new Error("Utilisateur non trouvé");
+        }
+        setUser(foundUser);
+      } catch (err) {
+        setError("Utilisateur non trouvé");
+      }
+    };
+
+    fetchUsers();
+  }, [id]);
+
+  if (error || !user) {
     return (
-      <div className="flex flex-col justify-center items-center h-screen">
-        Connectez-vous pour voir votre feed
-        <Link to="/login" className="btn btn-outline btn-primary mt-4">
-          Connexion
-        </Link>
+      <div className="min-h-screen bg-base-200 flex items-center justify-center">
+        <p className="text-error">{error}</p>
       </div>
     );
   }
 
   return (
     <div className="min-h-screen bg-base-200 p-4">
-      <div className="container mx-auto px-4 max-w-4xl">
-        <div className="card bg-base-100 shadow-xl mt-16">
+      <div className="container mx-auto px-4 max-w-4xl mt-16">
+        <div className="card bg-base-100 shadow-xl">
           <div className="card-body p-4 md:p-6">
             <div className="flex flex-col md:flex-row gap-4 md:gap-6 items-center md:items-start">
               <div className="avatar">
@@ -64,8 +85,8 @@ export default function UserProfile() {
               </div>
             </div>
 
-            {/* Posts Section */}
-            <div className="mt-8">
+            <div className="divider mt-8">Publications</div>
+            <div className="mt-4">
               <OtherUserPosts user={user} />
             </div>
           </div>

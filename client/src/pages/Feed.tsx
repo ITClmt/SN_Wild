@@ -130,51 +130,54 @@ export default function Feed() {
             <div className="card-body p-4">
               {/* Post Header with User Info */}
               <div className="flex justify-between items-start">
-                <div className="flex gap-3 items-center">
-                  <figure className="avatar w-12 h-12 rounded-full">
-                    <img
-                      src={
-                        otherUsers.find(
+                <Link to={`/profile/${post.user_id}`}>
+                  <div className="flex gap-3 items-center">
+                    <figure className="avatar w-12 h-12 rounded-full">
+                      <img
+                        src={
+                          otherUsers.find(
+                            (u) => Number(u.id) === Number(post.user_id),
+                          )?.profile_picture ||
+                          "https://cdn.pixabay.com/photo/2022/06/05/07/04/person-7243410_1280.png"
+                        }
+                        alt="User avatar"
+                      />
+                    </figure>
+                    <div>
+                      <h3 className="font-semibold text-sm">
+                        {otherUsers.find(
                           (u) => Number(u.id) === Number(post.user_id),
-                        )?.profile_picture ||
-                        "https://cdn.pixabay.com/photo/2022/06/05/07/04/person-7243410_1280.png"
-                      }
-                      alt="User avatar"
-                    />
-                  </figure>
-                  <div>
-                    <h3 className="font-semibold text-sm">
-                      {otherUsers.find(
-                        (u) => Number(u.id) === Number(post.user_id),
-                      )?.username || "Utilisateur"}
-                    </h3>
-                    <time className="text-xs text-base-content/60">
-                      {new Date(post.created_at).toLocaleDateString()} à{" "}
-                      {new Date(post.created_at).toLocaleTimeString([], {
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })}
-                    </time>
+                        )?.username || "Utilisateur"}
+                      </h3>
+                      <time className="text-xs text-base-content/60">
+                        {new Date(post.created_at).toLocaleDateString()} à{" "}
+                        {new Date(post.created_at).toLocaleTimeString([], {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
+                      </time>
+                    </div>
                   </div>
-                </div>
-                {user?.id === Number(post.user_id) && (
-                  <details className="dropdown">
-                    <summary className="btn btn-ghost btn-xs">
-                      <BsThreeDots />
-                    </summary>
-                    <ul className="menu dropdown-content bg-base-100 rounded-box z-1 w-24 p-2 shadow-sm">
-                      <li>
-                        <button
-                          type="button"
-                          className="btn btn-ghost btn-xs text-red-500"
-                          onClick={() => handleDelete(post.id)}
-                        >
-                          Supprimer
-                        </button>
-                      </li>
-                    </ul>
-                  </details>
-                )}
+
+                  {user?.id === Number(post.user_id) && (
+                    <details className="dropdown">
+                      <summary className="btn btn-ghost btn-xs">
+                        <BsThreeDots />
+                      </summary>
+                      <ul className="menu dropdown-content bg-base-100 rounded-box z-1 w-24 p-2 shadow-sm">
+                        <li>
+                          <button
+                            type="button"
+                            className="btn btn-ghost btn-xs text-red-500"
+                            onClick={() => handleDelete(post.id)}
+                          >
+                            Supprimer
+                          </button>
+                        </li>
+                      </ul>
+                    </details>
+                  )}
+                </Link>
               </div>
 
               {/* Post Content */}
