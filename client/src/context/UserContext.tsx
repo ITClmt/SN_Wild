@@ -7,14 +7,6 @@ import {
 } from "react";
 import axios from "axios";
 
-interface UserContextType {
-  user: UserType | null;
-  isAuthenticated: boolean;
-  login: (userData: { id: number; username: string }) => void;
-  logout: () => void;
-  setUser: (userData: UserType) => void;
-}
-
 const UserContext = createContext<UserContextType | null>(null);
 
 export const UserProvider = ({ children }: { children: ReactNode }) => {
