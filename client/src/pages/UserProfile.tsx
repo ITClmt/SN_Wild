@@ -61,16 +61,14 @@ export default function UserProfile() {
                     <p className="text-base-content/80">{user.bio}</p>
                   </div>
                 )}
-                {user.website && (
-                  <a
-                    href={user.website}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="btn btn-link btn-sm px-0"
-                  >
-                    {user.website}
-                  </a>
-                )}
+                <a
+                  href={user.website}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn btn-link btn-sm px-0"
+                >
+                  {user.website}
+                </a>
               </div>
             </div>
 
