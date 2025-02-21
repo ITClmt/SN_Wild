@@ -43,7 +43,10 @@ const loginController: RequestHandler = async (req, res) => {
       maxAge: 24 * 60 * 60 * 1000, // 24 hours
     });
 
-    res.status(200).json({ user: response.user });
+    res.status(200).json({
+      user: response.user,
+      message: response.message,
+    });
   } catch (error: unknown) {
     if (error instanceof Error) {
       res.status(401).json({ message: error.message });

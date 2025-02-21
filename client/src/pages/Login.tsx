@@ -33,7 +33,6 @@ export default function Login() {
         },
         { withCredentials: true },
       );
-      console.info(response.data.user);
 
       login(response.data.user);
       navigate("/profile");

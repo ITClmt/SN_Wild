@@ -46,13 +46,9 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
 
   const logout = async () => {
     try {
-      await axios.post(
-        `${baseUrl}/api/auth/logout`,
-        {},
-        {
-          withCredentials: true,
-        },
-      );
+      await axios.post(`${baseUrl}/api/auth/logout`, {
+        withCredentials: true,
+      });
       setUser(null);
     } catch (error) {
       console.error("Logout error:", error);
