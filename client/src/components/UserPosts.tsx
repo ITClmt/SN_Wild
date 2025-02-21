@@ -1,8 +1,8 @@
-import axios from "axios";
 import { BsThreeDots } from "react-icons/bs";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
+import axios from "axios";
 interface PostType {
   id: number;
   content: string;
@@ -41,71 +41,70 @@ const renderTextWithLinks = (text: string) => {
 
 export default function UserPosts({ user }: { user: UserType }) {
   const [posts, setPosts] = useState<PostType[]>([]);
-  const [refresh, setRefresh] = useState(0);
+
   const {
     register,
     handleSubmit,
-    reset,
     formState: { errors },
   } = useForm<PostFormData>();
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
-    axios
-      .get(`${import.meta.env.VITE_API_URL}/api/posts`)
-      .then((res) => {
-        setPosts(
-          res.data.filter(
-            (post: PostType) => Number(post.user_id) === Number(user.id),
-          ),
+    const fetchPosts = async () => {
+      try {
+        const { data } = await axios.get(
+          `${import.meta.env.VITE_API_URL}/api/posts`,
         );
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  }, [user.id, refresh]);
+        setPosts(data.filter((post: PostType) => post.user_id === user.id));
+      } catch (error) {
+        console.error("Error fetching posts:", error);
+      }
+    };
 
-  const onSubmit = (data: PostFormData) => {
-    const token = localStorage.getItem("token");
+    fetchPosts();
+  }, [user.id]);
+
+  const onSubmit = async (data: PostFormData) => {
     const modal = document.getElementById("my_modal_3") as HTMLDialogElement;
     modal?.close();
-
-    axios
-      .post(
-        `${import.meta.env.VITE_API_URL}/api/posts`,
-        {
-          content: data.content,
-          user_id: user.id,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
+    try {
+      await axios
+        .post(
+          `${import.meta.env.VITE_API_URL}/api/posts`,
+          {
+            content: data.content,
+            user_id: user.id,
           },
-        },
-      )
-      .then(() => {
-        reset();
-        setRefresh((prev) => prev + 1);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
+          {
+            withCredentials: true,
+          },
+        )
+        .catch((err) => {
+          console.error(err);
+        });
+    } catch (error) {
+      console.error("Error posting:", error);
+    }
+
+    const response = await axios.get(
+      `${import.meta.env.VITE_API_URL}/api/posts`,
+    );
+    setPosts(
+      response.data.filter((post: PostType) => post.user_id === user.id),
+    );
   };
 
-  const handleDelete = (id: number) => {
-    const token = localStorage.getItem("token");
-    axios
-      .delete(`${import.meta.env.VITE_API_URL}/api/posts/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
+  const handleDelete = async (postId: number) => {
+    try {
+      await axios.delete(
+        `${import.meta.env.VITE_API_URL}/api/posts/${postId}`,
+        {
+          withCredentials: true,
         },
-      })
-      .then(() => {
-        setRefresh((prev) => prev + 1);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
+      );
+      setPosts(posts.filter((post) => post.id !== postId));
+    } catch (error) {
+      console.error("Error deleting post:", error);
+    }
   };
 
   if (posts.length === 0) {

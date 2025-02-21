@@ -14,7 +14,7 @@ type ProfileFormData = {
 };
 
 export default function Profile() {
-  const { user, logout } = useUser();
+  const { user, logout, setUser } = useUser();
   const navigate = useNavigate();
   const {
     register,
@@ -41,14 +41,25 @@ export default function Profile() {
     );
   }
 
+  const handleProfileUpdate = async (data: ProfileFormData) => {
+    try {
+      await axios.put(`${import.meta.env.VITE_API_URL}/api/users/me`, data, {
+        withCredentials: true,
+      });
+      // Refresh user data after update
+      const response = await axios.get(
+        `${import.meta.env.VITE_API_URL}/api/users/me`,
+        { withCredentials: true },
+      );
+      setUser(response.data);
+    } catch (error) {
+      console.error("Error updating profile:", error);
+    }
+  };
+
   const onSubmit = (data: ProfileFormData) => {
-    const token = localStorage.getItem("token");
     console.info(data);
-    axios.put(`${import.meta.env.VITE_API_URL}/api/users/me`, data, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    handleProfileUpdate(data);
     const modal = document.getElementById("my_modal_1") as HTMLDialogElement;
     modal?.close();
     window.location.reload();
@@ -111,7 +122,7 @@ export default function Profile() {
                   type="button"
                   onClick={() => {
                     logout();
-                    navigate("/login");
+                    navigate("/");
                   }}
                   className="btn btn-ghost btn-sm text-error"
                 >

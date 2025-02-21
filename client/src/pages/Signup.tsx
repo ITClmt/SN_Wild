@@ -1,9 +1,10 @@
-import axios, { type AxiosError } from "axios";
 import ThemeController from "../components/ThemeController";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { useUser } from "../context/UserContext";
 import { useState } from "react";
+import axios from "axios";
+import type { AxiosError } from "axios";
 
 interface IFormInput {
   email: string;
@@ -25,20 +26,23 @@ export default function Signup() {
     setError("");
     try {
       const response = await axios.post(
-        "http://localhost:3310/api/auth/signup",
+        `${import.meta.env.VITE_API_URL}/api/auth/signup`,
         {
           username: data.username,
           email: data.email,
           password: data.password,
         },
+        { withCredentials: true },
       );
-      await login(response.data.token);
+      console.info(response.data.user);
+
+      login(response.data.user);
       navigate("/profile");
     } catch (error) {
       if ((error as AxiosError)?.response?.status === 401) {
-        setError("Identifiants invalides. Veuillez réessayer.");
+        setError("Invalid credentials");
       } else {
-        setError("Une erreur est survenue. Veuillez réessayer plus tard.");
+        setError("An error occurred. Please try again later.");
       }
     }
   };

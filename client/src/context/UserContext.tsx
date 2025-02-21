@@ -1,4 +1,3 @@
-import axios from "axios";
 import {
   createContext,
   useContext,
@@ -6,46 +5,63 @@ import {
   useState,
   useEffect,
 } from "react";
+import axios from "axios";
 
 interface UserContextType {
   user: UserType | null;
   isAuthenticated: boolean;
-  login: (token: string) => Promise<void>;
+  login: (userData: { id: number; username: string }) => void;
   logout: () => void;
+  setUser: (userData: UserType) => void;
 }
 
 const UserContext = createContext<UserContextType | null>(null);
 
 export const UserProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<UserType | null>(null);
-  const baseUrl = import.meta.env.VITE_API_URL || "http://localhost:3310";
+  const [isLoading, setIsLoading] = useState(true);
+  const baseUrl = import.meta.env.VITE_API_URL;
 
+  // Vérifie l'authentification au chargement
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) fetchUser(token);
+    const checkAuth = async () => {
+      try {
+        const { data } = await axios.get(`${baseUrl}/api/users/me`, {
+          withCredentials: true,
+        });
+        setUser(data);
+      } catch (error) {
+        setUser(null);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    checkAuth();
   }, []);
 
-  const fetchUser = async (token: string) => {
+  const login = (userData: { id: number; username: string }) => {
+    setUser(userData as UserType);
+  };
+
+  const logout = async () => {
     try {
-      const { data } = await axios.get(`${baseUrl}/api/users/me`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setUser(data);
-    } catch {
-      localStorage.removeItem("token");
+      await axios.post(
+        `${baseUrl}/api/auth/logout`,
+        {},
+        {
+          withCredentials: true,
+        },
+      );
       setUser(null);
+    } catch (error) {
+      console.error("Logout error:", error);
     }
   };
 
-  const login = async (token: string) => {
-    localStorage.setItem("token", token);
-    await fetchUser(token);
-  };
-
-  const logout = () => {
-    localStorage.removeItem("token");
-    setUser(null);
-  };
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <UserContext.Provider
@@ -54,6 +70,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
         isAuthenticated: !!user,
         login,
         logout,
+        setUser,
       }}
     >
       {children}

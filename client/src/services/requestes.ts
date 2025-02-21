@@ -12,14 +12,4 @@ const authenticateUser = async (data: { email: string; password: string }) => {
   return response.data;
 };
 
-const getUserbyid = async (id: number) => {
-  const response = await axios
-    .get(`${baseUrl}/api/users/${id}`)
-    .catch((error) => {
-      console.error("Error getting user by id:", error);
-      throw error;
-    });
-  return response.data;
-};
-
-export { authenticateUser, getUserbyid };
+export { authenticateUser };

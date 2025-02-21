@@ -6,7 +6,20 @@ const signupController: RequestHandler = async (req, res) => {
   try {
     const { email, username, password } = req.body;
     const response = await usersActions.signupUser(email, username, password);
-    res.status(201).json(response);
+
+    // Set cookie
+    res.cookie("token", response.token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: 24 * 60 * 60 * 1000, // 24 hours
+    });
+
+    res.status(201).json({
+      message: response.message,
+      token: response.token,
+      user: response.user,
+    });
   } catch (error: unknown) {
     if (error instanceof Error) {
       res.status(400).json({ message: error.message });
@@ -21,7 +34,16 @@ const loginController: RequestHandler = async (req, res) => {
   try {
     const { email, password } = req.body;
     const response = await usersActions.loginUser(email, password);
-    res.status(200).json(response);
+
+    // Set cookie
+    res.cookie("token", response.token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: 24 * 60 * 60 * 1000, // 24 hours
+    });
+
+    res.status(200).json({ user: response.user });
   } catch (error: unknown) {
     if (error instanceof Error) {
       res.status(401).json({ message: error.message });
@@ -103,6 +125,15 @@ const removeUserController: RequestHandler = async (req, res) => {
   }
 };
 
+const logoutController: RequestHandler = (req, res) => {
+  res.clearCookie("token", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "strict",
+  });
+  res.json({ message: "Logged out successfully" });
+};
+
 export default {
   signupController,
   loginController,
@@ -110,4 +141,5 @@ export default {
   getUserProfileController,
   editUserProfileController,
   removeUserController,
+  logoutController,
 };

@@ -17,12 +17,12 @@ export default function UserProfile() {
   const [user, setUser] = useState<UserProfileData | null>(null);
   const [error, setError] = useState<string | null>(null);
 
+  const baseUrl = import.meta.env.VITE_API_URL;
+
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const { data } = await axios.get(
-          `${import.meta.env.VITE_API_URL}/api/users`,
-        );
+        const { data } = await axios.get(`${baseUrl}/api/users`);
         const foundUser = data.find(
           (u: UserProfileData) => u.id === Number(id),
         );

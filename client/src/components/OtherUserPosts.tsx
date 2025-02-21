@@ -37,18 +37,22 @@ export default function OtherUserPosts({ user }: { user: UserType }) {
   const [posts, setPosts] = useState<PostType[]>([]);
 
   useEffect(() => {
-    axios
-      .get(`${import.meta.env.VITE_API_URL}/api/posts`)
-      .then((res) => {
+    const fetchPosts = async () => {
+      try {
+        const { data } = await axios.get(
+          `${import.meta.env.VITE_API_URL}/api/posts`,
+        );
         setPosts(
-          res.data.filter(
+          data.filter(
             (post: PostType) => Number(post.user_id) === Number(user.id),
           ),
         );
-      })
-      .catch((err) => {
-        console.error(err);
-      });
+      } catch (error) {
+        console.error("Error fetching posts:", error);
+      }
+    };
+
+    fetchPosts();
   }, [user.id]);
 
   if (posts.length === 0) {

@@ -1,10 +1,10 @@
-import axios from "axios";
 import { useState } from "react";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import type { AxiosError } from "axios";
 import { useUser } from "../context/UserContext";
 import ThemeController from "../components/ThemeController";
+import axios from "axios";
 
 interface IFormInput {
   email: string;
@@ -26,21 +26,22 @@ export default function Login() {
     setError("");
     try {
       const response = await axios.post(
-        "http://localhost:3310/api/auth/login",
+        `${import.meta.env.VITE_API_URL}/api/auth/login`,
         {
           email: data.email,
           password: data.password,
         },
+        { withCredentials: true },
       );
+      console.info(response.data.user);
 
-      // Wait for login to complete before navigating
-      await login(response.data.token);
+      login(response.data.user);
       navigate("/profile");
     } catch (error) {
       if ((error as AxiosError)?.response?.status === 401) {
-        setError("Identifiants invalides. Veuillez réessayer.");
+        setError("Invalid credentials");
       } else {
-        setError("Une erreur est survenue. Veuillez réessayer plus tard.");
+        setError("An error occurred. Please try again later.");
       }
     }
   };

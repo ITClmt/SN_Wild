@@ -21,7 +21,6 @@ import Profile from "./pages/Profile";
 /* ************************************************************************* */
 
 import { UserProvider } from "./context/UserContext";
-import { ProtectedRoute } from "./routes/ProtectedRoute";
 
 // Create router configuration with routes
 // You can add more routes as you build out your app!
@@ -36,11 +35,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/profile",
-        element: (
-          <ProtectedRoute>
-            <Profile />
-          </ProtectedRoute>
-        ),
+        element: <Profile />,
       },
       {
         path: "/feed",

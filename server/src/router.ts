@@ -11,7 +11,7 @@ import usersController from "./modules/users/usersController";
 
 router.post("/api/auth/signup", usersController.signupController);
 router.post("/api/auth/login", usersController.loginController);
-
+router.post("/api/auth/logout", usersController.logoutController);
 // 🔹 User routes
 
 router.get("/api/users", usersController.browseUsersController);
@@ -33,6 +33,7 @@ router.delete(
 
 // 🔹 Post routes
 import postController from "./modules/posts/postController";
+
 router.get("/api/posts", postController.browsePostsController);
 router.get("/api/posts/:id", postController.readPostController);
 router.post("/api/posts", authenticateToken, postController.addPostController);

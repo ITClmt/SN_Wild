@@ -19,13 +19,18 @@ const signupUser = async (
     username,
     hashedPassword,
   );
+
   const token = jwt.sign(
     { id: userId, username },
     process.env.JWT_SECRET as string,
-    { expiresIn: "1h" },
+    { expiresIn: "24h" },
   );
 
-  return { message: "Inscription réussie", token };
+  return {
+    message: "Inscription réussie",
+    token,
+    user: { id: userId, username },
+  };
 };
 
 // 🔹 Connexion (Login)
@@ -41,7 +46,7 @@ const loginUser = async (email: string, password: string) => {
     { expiresIn: "1h" },
   );
 
-  return { message: "Connexion réussie", token };
+  return { message: "Connexion réussie", token, user };
 };
 
 // 🔹 Voir les utilisateurs (Browse - Admin uniquement)

@@ -15,7 +15,7 @@ declare module "express-serve-static-core" {
 }
 
 export const authenticateToken: RequestHandler = (req, res, next) => {
-  const token = req.headers.authorization?.split(" ")[1]; // Format attendu : "Bearer <token>"
+  const token = req.cookies.token;
 
   if (!token) {
     res.status(401).json({ message: "Access denied. No token provided." });
@@ -27,10 +27,11 @@ export const authenticateToken: RequestHandler = (req, res, next) => {
       token,
       process.env.JWT_SECRET as string,
     ) as JwtPayload;
-    req.user = decoded; // Injecte les infos utilisateur dans `req.user`
+    req.user = decoded;
     next();
   } catch (err) {
     res.status(403).json({ message: "Invalid token." });
+    return;
   }
 };
 

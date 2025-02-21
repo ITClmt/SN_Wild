@@ -14,29 +14,31 @@ export default function Feed() {
   const { register, handleSubmit, reset } = useForm<PostType>();
 
   const onSubmit = async (data: PostType) => {
-    const token = localStorage.getItem("token");
-    await axios.post(`${import.meta.env.VITE_API_URL}/api/posts`, data, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    try {
+      await axios.post(`${import.meta.env.VITE_API_URL}/api/posts`, data, {
+        withCredentials: true,
+      });
 
-    // Recharger les posts après avoir posté
-    const response = await axios.get(
-      `${import.meta.env.VITE_API_URL}/api/posts`,
-    );
-    setPosts(response.data);
-    reset();
+      // Reload posts after posting
+      const response = await axios.get(
+        `${import.meta.env.VITE_API_URL}/api/posts`,
+      );
+      setPosts(response.data);
+      reset();
+    } catch (error) {
+      console.error("Error posting:", error);
+    }
   };
 
-  const handleDelete = (id: number) => {
-    const token = localStorage.getItem("token");
-    axios.delete(`${import.meta.env.VITE_API_URL}/api/posts/${id}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    setPosts(posts.filter((post) => post.id !== id));
+  const handleDelete = async (id: number) => {
+    try {
+      await axios.delete(`${import.meta.env.VITE_API_URL}/api/posts/${id}`, {
+        withCredentials: true,
+      });
+      setPosts(posts.filter((post) => post.id !== id));
+    } catch (error) {
+      console.error("Error deleting post:", error);
+    }
   };
 
   const renderTextWithLinks = (text: string) => {

@@ -18,10 +18,11 @@ const app = express();
 // You should NOT do that: such code uses the `cors` module to allow all origins, which can pose security issues.
 // For this pedagogical template, the CORS code allows CLIENT_URL in development mode (when process.env.CLIENT_URL is defined).
 
+import cookieParser from "cookie-parser";
 import cors from "cors";
 
 if (process.env.CLIENT_URL != null) {
-  app.use(cors({ origin: [process.env.CLIENT_URL] }));
+  app.use(cors({ origin: [process.env.CLIENT_URL], credentials: true }));
 }
 
 // If you need to allow extra origins, you can add something like this:
@@ -53,6 +54,7 @@ app.use(
 // Uncomment one or more of these options depending on the format of the data sent by your client:
 
 app.use(express.json());
+app.use(cookieParser());
 // app.use(express.urlencoded());
 // app.use(express.text());
 // app.use(express.raw());
