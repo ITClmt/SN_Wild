@@ -1,31 +1,17 @@
 import { BsThreeDots } from "react-icons/bs";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-
 import axios from "axios";
-interface PostType {
-  id: number;
-  content: string;
-  created_at: string;
-  updated_at: string;
-  user_id: number;
-}
-
-interface PostFormData {
-  content: string;
-}
 
 // Fonction pour rendre les liens cliquables
 const renderTextWithLinks = (text: string) => {
   const urlRegex = /(https?:\/\/[^\s]+)/g;
   const parts = text.split(urlRegex);
 
-  return parts.map((part, index) => {
+  return parts.map((part) => {
     if (part.match(urlRegex)) {
       return (
         <a
-          // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
-          key={index}
           href={part}
           target="_blank"
           rel="noopener noreferrer"
@@ -40,8 +26,7 @@ const renderTextWithLinks = (text: string) => {
 };
 
 export default function UserPosts({ user }: { user: UserType }) {
-  const [posts, setPosts] = useState<PostType[]>([]);
-
+  const [posts, setPosts] = useState([] as PostType[]);
   const {
     register,
     handleSubmit,

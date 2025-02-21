@@ -14,8 +14,7 @@ interface IFormInput {
 export default function Login() {
   const [error, setError] = useState("");
   const navigate = useNavigate();
-  const { login } = useUser();
-
+  const { login, isAuthenticated } = useUser();
   const {
     register,
     handleSubmit,
@@ -38,14 +37,12 @@ export default function Login() {
       navigate("/profile");
     } catch (error) {
       if ((error as AxiosError)?.response?.status === 401) {
-        setError("Invalid credentials");
+        setError("Identifiants invalides");
       } else {
-        setError("An error occurred. Please try again later.");
+        setError("Une erreur est survenue. Veuillez réessayer plus tard.");
       }
     }
   };
-
-  const { isAuthenticated } = useUser();
 
   if (isAuthenticated) {
     return <Navigate to="/profile" replace />;

@@ -3,19 +3,10 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import OtherUserPosts from "../components/OtherUserPosts";
 
-interface UserProfileData {
-  id: number;
-  username: string;
-  email: string;
-  bio?: string;
-  website?: string;
-  profile_picture?: string;
-}
-
 export default function UserProfile() {
-  const { id } = useParams();
-  const [user, setUser] = useState<UserProfileData | null>(null);
+  const [user, setUser] = useState<UserType | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const { id } = useParams();
 
   const baseUrl = import.meta.env.VITE_API_URL;
 
@@ -23,9 +14,7 @@ export default function UserProfile() {
     const fetchUsers = async () => {
       try {
         const { data } = await axios.get(`${baseUrl}/api/users`);
-        const foundUser = data.find(
-          (u: UserProfileData) => u.id === Number(id),
-        );
+        const foundUser = data.find((u: UserType) => u.id === Number(id));
         if (!foundUser) {
           throw new Error("Utilisateur non trouvé");
         }

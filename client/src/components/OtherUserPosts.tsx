@@ -1,25 +1,15 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 
-interface PostType {
-  id: number;
-  content: string;
-  created_at: string;
-  updated_at: string;
-  user_id: number;
-}
-
 // Fonction pour rendre les liens cliquables
 const renderTextWithLinks = (text: string) => {
   const urlRegex = /(https?:\/\/[^\s]+)/g;
   const parts = text.split(urlRegex);
 
-  return parts.map((part, index) => {
+  return parts.map((part) => {
     if (part.match(urlRegex)) {
       return (
         <a
-          // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
-          key={index}
           href={part}
           target="_blank"
           rel="noopener noreferrer"
@@ -34,7 +24,7 @@ const renderTextWithLinks = (text: string) => {
 };
 
 export default function OtherUserPosts({ user }: { user: UserType }) {
-  const [posts, setPosts] = useState<PostType[]>([]);
+  const [posts, setPosts] = useState([] as PostType[]);
 
   useEffect(() => {
     const fetchPosts = async () => {

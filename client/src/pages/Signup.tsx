@@ -34,15 +34,14 @@ export default function Signup() {
         },
         { withCredentials: true },
       );
-      console.info(response.data.user);
 
       login(response.data.user);
       navigate("/profile");
     } catch (error) {
       if ((error as AxiosError)?.response?.status === 401) {
-        setError("Invalid credentials");
+        setError("Identifiants invalides");
       } else {
-        setError("An error occurred. Please try again later.");
+        setError("Une erreur est survenue. Veuillez réessayer plus tard.");
       }
     }
   };

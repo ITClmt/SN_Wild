@@ -1,17 +1,9 @@
+import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { useUser } from "../context/UserContext";
 import UserPosts from "../components/UserPosts";
 import { useForm } from "react-hook-form";
-import axios from "axios";
 import { RxCross2 } from "react-icons/rx";
-
-type ProfileFormData = {
-  username: string;
-  email: string;
-  bio: string;
-  website: string;
-  profile_picture?: string;
-};
 
 export default function Profile() {
   const { user, logout, setUser } = useUser();
@@ -30,22 +22,12 @@ export default function Profile() {
     },
   });
 
-  if (!user) {
-    return (
-      <div className="flex items-center justify-center h-screen flex-col gap-4">
-        <p className="text-2xl font-bold">Please login</p>
-        <Link to="/login" className="btn btn-secondary">
-          Login
-        </Link>
-      </div>
-    );
-  }
-
   const handleProfileUpdate = async (data: ProfileFormData) => {
     try {
       await axios.put(`${import.meta.env.VITE_API_URL}/api/users/me`, data, {
         withCredentials: true,
       });
+
       // Refresh user data after update
       const response = await axios.get(
         `${import.meta.env.VITE_API_URL}/api/users/me`,
@@ -58,12 +40,22 @@ export default function Profile() {
   };
 
   const onSubmit = (data: ProfileFormData) => {
-    console.info(data);
     handleProfileUpdate(data);
     const modal = document.getElementById("my_modal_1") as HTMLDialogElement;
     modal?.close();
     window.location.reload();
   };
+
+  if (!user) {
+    return (
+      <div className="flex items-center justify-center h-screen flex-col gap-4">
+        <p className="text-2xl font-bold">Please login</p>
+        <Link to="/login" className="btn btn-secondary">
+          Login
+        </Link>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-base-200 p-4">

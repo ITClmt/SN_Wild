@@ -18,8 +18,7 @@ interface UserContextType {
 const UserContext = createContext<UserContextType | null>(null);
 
 export const UserProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState<UserType | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [user, setUser] = useState(null as UserType | null);
   const baseUrl = import.meta.env.VITE_API_URL;
 
   // Vérifie l'authentification au chargement
@@ -32,8 +31,6 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
         setUser(data);
       } catch (error) {
         setUser(null);
-      } finally {
-        setIsLoading(false);
       }
     };
 
@@ -54,10 +51,6 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
       console.error("Logout error:", error);
     }
   };
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
 
   return (
     <UserContext.Provider

@@ -1,9 +1,9 @@
+import axios from "axios";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useUser } from "../context/UserContext";
 import { useForm } from "react-hook-form";
 import { useEffect } from "react";
-import axios from "axios";
 import { LuHeart, LuMessageCircle } from "react-icons/lu";
 import { BsThreeDots } from "react-icons/bs";
 
@@ -12,6 +12,46 @@ export default function Feed() {
   const [posts, setPosts] = useState<PostType[]>([]);
   const { user, isAuthenticated } = useUser();
   const { register, handleSubmit, reset } = useForm<PostType>();
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        const [usersResponse, postsResponse] = await Promise.all([
+          axios.get(`${import.meta.env.VITE_API_URL}/api/users`),
+          axios.get(`${import.meta.env.VITE_API_URL}/api/posts`),
+        ]);
+        setOtherUsers(usersResponse.data);
+        setPosts(postsResponse.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchPosts();
+  }, []);
+
+  const renderTextWithLinks = (text: string) => {
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
+    const parts = text.split(urlRegex);
+
+    return parts.map((part, index) => {
+      if (part.match(urlRegex)) {
+        return (
+          <a
+            // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+            key={index}
+            href={part}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="link link-primary"
+          >
+            {part}
+          </a>
+        );
+      }
+      return part;
+    });
+  };
 
   const onSubmit = async (data: PostType) => {
     try {
@@ -40,46 +80,6 @@ export default function Feed() {
       console.error("Error deleting post:", error);
     }
   };
-
-  const renderTextWithLinks = (text: string) => {
-    const urlRegex = /(https?:\/\/[^\s]+)/g;
-    const parts = text.split(urlRegex);
-
-    return parts.map((part, index) => {
-      if (part.match(urlRegex)) {
-        return (
-          <a
-            // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
-            key={index}
-            href={part}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="link link-primary"
-          >
-            {part}
-          </a>
-        );
-      }
-      return part;
-    });
-  };
-
-  useEffect(() => {
-    const fetchPosts = async () => {
-      try {
-        const [usersResponse, postsResponse] = await Promise.all([
-          axios.get(`${import.meta.env.VITE_API_URL}/api/users`),
-          axios.get(`${import.meta.env.VITE_API_URL}/api/posts`),
-        ]);
-        setOtherUsers(usersResponse.data);
-        setPosts(postsResponse.data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchPosts();
-  }, []);
 
   if (!isAuthenticated) {
     return (
