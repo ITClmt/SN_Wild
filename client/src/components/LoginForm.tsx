@@ -1,18 +1,15 @@
-import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import axios, { type AxiosError } from "axios";
+import { type SubmitHandler, useForm } from "react-hook-form";
 import { useUser } from "../context/UserContext";
+import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import axios from "axios";
-import type { AxiosError } from "axios";
-import SignupNavBar from "../components/SignupNavBar";
 
 interface IFormInput {
   email: string;
   password: string;
-  username: string;
 }
 
-export default function Signup() {
+export default function LoginForm() {
   const [error, setError] = useState("");
   const navigate = useNavigate();
   const { login } = useUser();
@@ -22,13 +19,12 @@ export default function Signup() {
     formState: { errors },
   } = useForm<IFormInput>();
 
-  const onSubmit = async (data: IFormInput) => {
+  const onSubmit: SubmitHandler<IFormInput> = async (data) => {
     setError("");
     try {
       const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/auth/signup`,
+        `${import.meta.env.VITE_API_URL}/api/auth/login`,
         {
-          username: data.username,
           email: data.email,
           password: data.password,
         },
@@ -47,30 +43,11 @@ export default function Signup() {
   };
 
   return (
-    <section className="flex flex-col items-center justify-center h-screen font-poppins">
-      <SignupNavBar />
-      <h1 className="text-5xl font-oswald font-bold mb-10 text-center">
-        Créez votre compte
-      </h1>
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="flex flex-col items-center justify-center"
-      >
+    <article className="flex flex-col items-center justify-center ">
+      <form onSubmit={handleSubmit(onSubmit)}>
         <fieldset className="fieldset w-xs bg-base-200 border border-base-300 p-4 rounded-box">
-          <legend className="fieldset-legend">Sign-up</legend>
-          <label className="fieldset-label" htmlFor="username">
-            Pseudo/Nom
-          </label>
-          <input
-            type="text"
-            placeholder="Nom"
-            className="input"
-            autoComplete="username"
-            {...register("username", { required: true, minLength: 3 })}
-          />
-          {errors.username && (
-            <p className="text-error">Le pseudo/nom est requis</p>
-          )}
+          <legend className="fieldset-legend">Login</legend>
+
           <label className="fieldset-label" htmlFor="email">
             Email
           </label>
@@ -97,12 +74,14 @@ export default function Signup() {
               Le mot de passe doit contenir au moins 6 caractères
             </p>
           )}
+
           {error && <p className="text-error">{error}</p>}
-          <button type="submit" className="btn btn-primary">
-            Créer un compte
+
+          <button type="submit" className="btn btn-primary mt-4">
+            Login
           </button>
         </fieldset>
       </form>
-    </section>
+    </article>
   );
 }

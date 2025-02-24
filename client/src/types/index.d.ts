@@ -43,3 +43,15 @@ type ProfileFormData = {
   website: string;
   profile_picture?: string;
 };
+
+interface TextAreaFeedProps {
+  user: UserType;
+  setPosts: (posts: PostType[]) => void;
+}
+
+interface UsersPostsFeedProps {
+  posts: PostType[];
+  setPosts: (posts: PostType[]) => void;
+  otherUsers: UserType[];
+  user: UserType;
+}
