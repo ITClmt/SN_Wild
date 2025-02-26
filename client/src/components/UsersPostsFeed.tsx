@@ -1,7 +1,6 @@
 import axios from "axios";
 import { BsThreeDots } from "react-icons/bs";
 import { LuHeart } from "react-icons/lu";
-
 import { LuMessageCircle } from "react-icons/lu";
 import { Link } from "react-router-dom";
 
@@ -15,12 +14,10 @@ export default function UsersPostsFeed({
     const urlRegex = /(https?:\/\/[^\s]+)/g;
     const parts = text.split(urlRegex);
 
-    return parts.map((part, index) => {
+    return parts.map((part) => {
       if (part.match(urlRegex)) {
         return (
           <a
-            // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
-            key={index}
             href={part}
             target="_blank"
             rel="noopener noreferrer"
@@ -105,7 +102,7 @@ export default function UsersPostsFeed({
             </div>
 
             {/* Post Content */}
-            <div className="mt-3 text-base-content/90 text-lg">
+            <div className="mt-3 text-base-content/90 text-lg whitespace-pre-wrap break-all">
               {renderTextWithLinks(post.content)}
             </div>
 

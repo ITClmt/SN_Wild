@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-
+import { LuHeart, LuMessageCircle } from "react-icons/lu";
 // Fonction pour rendre les liens cliquables
 const renderTextWithLinks = (text: string) => {
   const urlRegex = /(https?:\/\/[^\s]+)/g;
@@ -57,6 +57,7 @@ export default function OtherUserPosts({ user }: { user: UserType }) {
   return (
     <div className="p-4">
       <h2 className="text-2xl font-bold mb-4">Posts de {user.username}</h2>
+
       <div className="space-y-4">
         {posts.map((post) => (
           <div
@@ -75,6 +76,17 @@ export default function OtherUserPosts({ user }: { user: UserType }) {
               <p className="text-base-content whitespace-pre-wrap mt-2">
                 {renderTextWithLinks(post.content)}
               </p>
+            </div>
+
+            <div className="flex gap-2 m-2">
+              <button type="button" className="btn btn-ghost btn-xs gap-1">
+                <LuHeart className="h-4 w-4" />
+                <span className="text-xs">0</span>
+              </button>
+              <button type="button" className="btn btn-ghost btn-xs gap-1">
+                <LuMessageCircle className="h-4 w-4" />
+                <span className="text-xs">0</span>
+              </button>
             </div>
           </div>
         ))}

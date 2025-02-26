@@ -35,10 +35,23 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
 
   const logout = async () => {
     try {
-      await axios.post(`${baseUrl}/api/auth/logout`, {
-        withCredentials: true,
-      });
+      // Clear cookie on server
+      await axios.post(
+        `${baseUrl}/api/auth/logout`,
+        {},
+        {
+          withCredentials: true,
+        },
+      );
+
+      // Clear local state
       setUser(null);
+
+      // Clear any cached auth data
+      window.localStorage.removeItem("isAuthenticated");
+
+      // Force reload to clear any persisted state
+      window.location.href = "/login";
     } catch (error) {
       console.error("Logout error:", error);
     }

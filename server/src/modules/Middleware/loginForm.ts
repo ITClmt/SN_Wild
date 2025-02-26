@@ -7,8 +7,8 @@ const loginSchema = Joi.object({
     "string.email": "L'email est invalide",
     "any.required": "L'email est requis",
   }),
-  password: Joi.string().min(8).max(30).required().messages({
-    "string.min": "Le mot de passe doit contenir au moins 8 caractères",
+  password: Joi.string().min(6).max(30).required().messages({
+    "string.min": "Le mot de passe doit contenir au moins 6 caractères",
     "string.max": "Le mot de passe doit contenir au plus 30 caractères",
   }),
 });
@@ -17,6 +17,7 @@ const validateLoginForm: RequestHandler = (req, res, next) => {
   const { error } = loginSchema.validate(req.body);
   if (error) {
     res.status(400).json({ message: error.details[0].message });
+    return;
   }
   next();
 };

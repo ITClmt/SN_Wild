@@ -22,6 +22,7 @@ router.post(
   usersController.loginController,
 );
 router.post("/api/auth/logout", usersController.logoutController);
+
 // 🔹 User routes
 
 router.get("/api/users", usersController.browseUsersController);

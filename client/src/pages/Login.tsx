@@ -4,10 +4,9 @@ import LoginNavBar from "../components/LoginNavBar";
 import LoginForm from "../components/LoginForm";
 
 export default function Login() {
-  const { isAuthenticated } = useUser();
-
-  if (isAuthenticated) {
-    return <Navigate to="/profile" replace />;
+  const { user, isAuthenticated } = useUser();
+  if (isAuthenticated || user) {
+    return <Navigate to="/profile" />;
   }
 
   return (
