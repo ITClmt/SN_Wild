@@ -1,8 +1,7 @@
-import axios from "axios";
-import { BsThreeDots } from "react-icons/bs";
 import { LuHeart } from "react-icons/lu";
 import { LuMessageCircle } from "react-icons/lu";
 import { Link } from "react-router-dom";
+import DeletePost from "./DeletePost";
 
 export default function UsersPostsFeed({
   posts,
@@ -29,17 +28,6 @@ export default function UsersPostsFeed({
       }
       return part;
     });
-  };
-
-  const handleDelete = async (id: number) => {
-    try {
-      await axios.delete(`${import.meta.env.VITE_API_URL}/api/posts/${id}`, {
-        withCredentials: true,
-      });
-      setPosts(posts.filter((post) => post.id !== id));
-    } catch (error) {
-      console.error("Error deleting post:", error);
-    }
   };
 
   return (
@@ -82,22 +70,7 @@ export default function UsersPostsFeed({
               </div>
 
               {user?.id === Number(post.user_id) && (
-                <details className="dropdown">
-                  <summary className="btn btn-ghost btn-xs">
-                    <BsThreeDots />
-                  </summary>
-                  <ul className="menu dropdown-content bg-base-100 rounded-box z-1 shadow-sm right-0">
-                    <li>
-                      <button
-                        type="button"
-                        className="btn btn-ghost btn-xs text-red-500"
-                        onClick={() => handleDelete(post.id)}
-                      >
-                        Supprimer
-                      </button>
-                    </li>
-                  </ul>
-                </details>
+                <DeletePost posts={posts} setPosts={setPosts} />
               )}
             </div>
 

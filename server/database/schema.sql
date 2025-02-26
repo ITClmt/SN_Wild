@@ -9,14 +9,15 @@ CREATE TABLE users (
   bio TEXT DEFAULT NULL,
   profile_picture VARCHAR(255) DEFAULT NULL,
   website VARCHAR(255) DEFAULT NULL,
+  role VARCHAR(50) NOT NULL DEFAULT 'user',
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-INSERT INTO users (email, username, password_hash, bio, website, profile_picture) VALUES
-  ('admin@example.com', 'admin', '$2b$10$ZLw7fJpVWw9zACa9vhWOm.lBeFi/clZ.pltSAIyVZJi6rbecE9gTa', 'Administrateur du site', 'www.example.com', 'https://cdn-icons-png.flaticon.com/512/3781/3781986.png'),
-  ('sophie@example.com', 'sophie', '$2b$10$ZLw7fJpVWw9zACa9vhWOm.lBeFi/clZ.pltSAIyVZJi6rbecE9gTa', 'Photographe passionnée', 'www.sophie-photo.com', 'https://images.unsplash.com/photo-1494790108377-be9c29b29330'),
-  ('lucas@example.com', 'lucas', '$2b$10$ZLw7fJpVWw9zACa9vhWOm.lBeFi/clZ.pltSAIyVZJi6rbecE9gTa', 'Développeur web full-stack', 'www.lucas-dev.net', 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e'),
-  ('emma@example.com', 'emma', '$2b$10$ZLw7fJpVWw9zACa9vhWOm.lBeFi/clZ.pltSAIyVZJi6rbecE9gTa', 'Blogueuse voyage', 'www.emma-travels.com', 'https://images.unsplash.com/photo-1534528741775-53994a69daeb');
+INSERT INTO users (email, username, password_hash, bio, website, profile_picture, role) VALUES
+  ('admin@example.com', 'admin', '$2b$10$ZLw7fJpVWw9zACa9vhWOm.lBeFi/clZ.pltSAIyVZJi6rbecE9gTa', 'Administrateur du site', 'www.example.com','https://cdn-icons-png.flaticon.com/512/3781/3781986.png','admin'),
+  ('sophie@example.com', 'sophie', '$2b$10$ZLw7fJpVWw9zACa9vhWOm.lBeFi/clZ.pltSAIyVZJi6rbecE9gTa', 'Photographe passionnée', 'www.sophie-photo.com', 'https://images.unsplash.com/photo-1494790108377-be9c29b29330','user'),
+  ('lucas@example.com', 'lucas', '$2b$10$ZLw7fJpVWw9zACa9vhWOm.lBeFi/clZ.pltSAIyVZJi6rbecE9gTa', 'Développeur web full-stack', 'www.lucas-dev.net', 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e','user'),
+  ('emma@example.com', 'emma', '$2b$10$ZLw7fJpVWw9zACa9vhWOm.lBeFi/clZ.pltSAIyVZJi6rbecE9gTa', 'Blogueuse voyage', 'www.emma-travels.com', 'https://images.unsplash.com/photo-1534528741775-53994a69daeb','user');
 
 CREATE TABLE posts (
   id INT AUTO_INCREMENT PRIMARY KEY,

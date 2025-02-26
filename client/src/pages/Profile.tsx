@@ -66,7 +66,7 @@ export default function Profile() {
             {/* Profile Header */}
             <div className="flex flex-col md:flex-row gap-4 md:gap-6 items-center md:items-start">
               <div className="avatar">
-                <div className="w-24 md:w-32 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
+                <div className="w-24 md:w-32 rounded-full ring ring-primary">
                   <img
                     src={
                       user.profile_picture ||
