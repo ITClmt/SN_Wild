@@ -1,4 +1,3 @@
-import axios from "axios";
 import {
   createContext,
   useContext,
@@ -6,70 +5,71 @@ import {
   useState,
   useEffect,
 } from "react";
-
-interface User {
-  id: string;
-  email: string;
-  username: string;
-}
-
-interface UserContextType {
-  user: User | null;
-  setUser: (user: User | null) => void;
-  isAuthenticated: boolean;
-  logout: () => void;
-  login: (token: string) => void;
-}
-
-interface UserProviderProps {
-  children: ReactNode;
-}
+import axios from "axios";
 
 const UserContext = createContext<UserContextType | null>(null);
 
-export const UserProvider = ({ children }: UserProviderProps) => {
-  const [user, setUser] = useState<User | null>(null);
+export const UserProvider = ({ children }: { children: ReactNode }) => {
+  const [user, setUser] = useState(null as UserType | null);
+  const baseUrl = import.meta.env.VITE_API_URL;
 
-  // Vérifie le token au chargement de l'application
+  // Vérifie l'authentification au chargement
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      axios
-        .get("http://localhost:3310/api/user/me", {
-          headers: { Authorization: `Bearer ${token}` },
-        })
-        .then((response) => setUser(response.data.user))
-        .catch(() => {
-          localStorage.removeItem("token");
+    const checkAuth = async () => {
+      try {
+        const { data } = await axios.get(`${baseUrl}/api/users/me`, {
+          withCredentials: true,
         });
-    }
+        setUser(data);
+      } catch (error) {
+        setUser(null);
+      }
+    };
+
+    checkAuth();
   }, []);
 
-  // Fonction pour connecter l'utilisateur
-  const login = (token: string) => {
-    localStorage.setItem("token", token);
-    axios
-      .get("http://localhost:3310/api/user/me", {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      .then((response) => setUser(response.data.user));
+  const login = (userData: { id: number; username: string }) => {
+    setUser(userData as UserType);
   };
 
-  // Fonction pour déconnecter l'utilisateur
-  const logout = () => {
-    localStorage.removeItem("token");
-    setUser(null);
+  const logout = async () => {
+    try {
+      // Clear cookie on server
+      await axios.post(
+        `${baseUrl}/api/auth/logout`,
+        {},
+        {
+          withCredentials: true,
+        },
+      );
+
+      // Clear local state
+      setUser(null);
+
+      // Clear any cached auth data
+      window.localStorage.removeItem("isAuthenticated");
+
+      // Force reload to clear any persisted state
+      window.location.href = "/login";
+    } catch (error) {
+      console.error("Logout error:", error);
+    }
   };
 
-  const value = {
-    user,
-    setUser,
-    isAuthenticated: !!user,
-    logout,
-    login,
-  };
-
-  return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
+  return (
+    <UserContext.Provider
+      value={{
+        user,
+        isAuthenticated: !!user,
+        login,
+        logout,
+        setUser,
+      }}
+    >
+      {children}
+    </UserContext.Provider>
+  );
 };
 
 // Custom hook to use the user context

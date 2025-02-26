@@ -7,16 +7,20 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 
 // Import the main app component
 import App from "./App";
-import Login from "./pages/Login";
-import Profile from "./pages/Profile";
 
 // Import additional components for new routes
 // Try creating these components in the "pages" folder
 
-// import About from "./pages/About";
-// import Contact from "./pages/Contact";
+import FirstPage from "./pages/FirstPage";
+import Signup from "./pages/Signup";
+import Feed from "./pages/Feed";
+import UserProfile from "./pages/UserProfile";
+import Login from "./pages/Login";
+import Profile from "./pages/Profile";
 
 /* ************************************************************************* */
+
+import { UserProvider } from "./context/UserContext";
 
 // Create router configuration with routes
 // You can add more routes as you build out your app!
@@ -26,15 +30,32 @@ const router = createBrowserRouter([
     element: <App />, // Renders the App component for the home page
     children: [
       {
-        path: "/login",
-        element: <Login />,
+        path: "/",
+        element: <FirstPage />,
       },
       {
         path: "/profile",
         element: <Profile />,
       },
+      {
+        path: "/feed",
+        element: <Feed />,
+      },
+      {
+        path: "/profile/:id",
+        element: <UserProfile />,
+      },
     ],
   },
+  {
+    path: "/login",
+    element: <Login />,
+  },
+  {
+    path: "/signup",
+    element: <Signup />,
+  },
+
   // Try adding a new route! For example, "/about" with an About component
 ]);
 
@@ -49,7 +70,9 @@ if (rootElement == null) {
 // Render the app inside the root element
 createRoot(rootElement).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <UserProvider>
+      <RouterProvider router={router} />
+    </UserProvider>
   </StrictMode>,
 );
 
