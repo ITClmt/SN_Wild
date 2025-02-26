@@ -6,6 +6,7 @@ interface UserType {
   bio?: string;
   profile_picture?: string;
   website?: string;
+  role: string;
 }
 
 interface PostType {
