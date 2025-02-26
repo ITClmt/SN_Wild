@@ -5,8 +5,8 @@ import { useUser } from "../context/UserContext";
 export default function NavBar() {
   const { isAuthenticated, user } = useUser();
   return (
-    <nav className="navbar fixed top-0 left-0 right-0 z-50 bg-base-100">
-      <div className="navbar-start">
+    <nav className="fixed top-0 left-0 p-4 z-10 flex justify-between w-full bg-base-100">
+      <div className="flex gap-4">
         <Link
           to={isAuthenticated ? "/feed" : "/"}
           className="btn btn-ghost text-xl"
@@ -15,7 +15,7 @@ export default function NavBar() {
         </Link>
       </div>
 
-      <div className="navbar-end">
+      <div className="flex gap-4">
         {isAuthenticated && (
           <Link to="/profile">
             <img

@@ -13,7 +13,7 @@ CREATE TABLE users (
 );
 
 INSERT INTO users (email, username, password_hash, bio, website, profile_picture) VALUES
-  ('admin@example.com', 'admin', '$2b$10$ZLw7fJpVWw9zACa9vhWOm.lBeFi/clZ.pltSAIyVZJi6rbecE9gTa', 'Administrateur du site', 'www.example.com', NULL),
+  ('admin@example.com', 'admin', '$2b$10$ZLw7fJpVWw9zACa9vhWOm.lBeFi/clZ.pltSAIyVZJi6rbecE9gTa', 'Administrateur du site', 'www.example.com', 'https://cdn-icons-png.flaticon.com/512/3781/3781986.png'),
   ('sophie@example.com', 'sophie', '$2b$10$ZLw7fJpVWw9zACa9vhWOm.lBeFi/clZ.pltSAIyVZJi6rbecE9gTa', 'Photographe passionnée', 'www.sophie-photo.com', 'https://images.unsplash.com/photo-1494790108377-be9c29b29330'),
   ('lucas@example.com', 'lucas', '$2b$10$ZLw7fJpVWw9zACa9vhWOm.lBeFi/clZ.pltSAIyVZJi6rbecE9gTa', 'Développeur web full-stack', 'www.lucas-dev.net', 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e'),
   ('emma@example.com', 'emma', '$2b$10$ZLw7fJpVWw9zACa9vhWOm.lBeFi/clZ.pltSAIyVZJi6rbecE9gTa', 'Blogueuse voyage', 'www.emma-travels.com', 'https://images.unsplash.com/photo-1534528741775-53994a69daeb');

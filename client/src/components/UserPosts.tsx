@@ -219,6 +219,7 @@ export default function UserPosts({ user }: { user: UserType }) {
                   minute: "2-digit",
                 })}`}
               </span>
+
               <details className="dropdown">
                 <summary className="btn btn-ghost btn-xs">
                   <BsThreeDots />
@@ -239,7 +240,7 @@ export default function UserPosts({ user }: { user: UserType }) {
 
             <div className="card-body">
               <div className="flex justify-between items-center">
-                <p className="text-base-content whitespace-pre-wrap">
+                <p className="text-base-content whitespace-pre-wrap break-all">
                   {renderTextWithLinks(post.content)}
                 </p>
               </div>
