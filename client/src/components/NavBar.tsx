@@ -17,7 +17,7 @@ export default function NavBar() {
 
       <div className="flex gap-4">
         {isAuthenticated && (
-          <Link to="/profile">
+          <Link to={`/profile/${user?.id}`}>
             <img
               src={
                 user?.profile_picture ||

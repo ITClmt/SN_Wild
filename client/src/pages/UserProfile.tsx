@@ -2,12 +2,13 @@ import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import UserPosts from "../components/UserPosts";
-
+import { useUser } from "../context/UserContext";
+import EditProfileModal from "../components/EditProfileModal";
 export default function UserProfile() {
   const [user, setUser] = useState<UserType | null>(null);
   const [error, setError] = useState<string | null>(null);
   const { id } = useParams();
-
+  const { logout, user: currentUser, setUser: setUserContext } = useUser();
   const baseUrl = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
@@ -70,6 +71,13 @@ export default function UserProfile() {
                   {user.website}
                 </a>
               </div>
+              {currentUser?.id === user.id && (
+                <EditProfileModal
+                  logout={logout}
+                  setUser={setUserContext}
+                  user={user}
+                />
+              )}
             </div>
 
             <div className="divider mt-8">Publications</div>
