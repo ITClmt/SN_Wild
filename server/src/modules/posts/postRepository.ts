@@ -24,7 +24,7 @@ class PostRepository {
   // 🔹 Récupérer un post par ID
   async getPostById(id: number): Promise<Post | null> {
     const [rows] = await db.query<RowDataPacket[]>(
-      "SELECT * FROM posts WHERE id = ?",
+      "SELECT posts.*, users.username FROM posts JOIN users ON posts.user_id = users.id WHERE posts.id = ?",
       [id],
     );
     return rows.length ? (rows[0] as Post) : null;

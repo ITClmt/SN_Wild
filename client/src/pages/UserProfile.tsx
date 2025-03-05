@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import OtherUserPosts from "../components/OtherUserPosts";
+import UserPosts from "../components/UserPosts";
 
 export default function UserProfile() {
   const [user, setUser] = useState<UserType | null>(null);
@@ -36,8 +36,8 @@ export default function UserProfile() {
   }
 
   return (
-    <div className="min-h-screen bg-base-200 p-4">
-      <div className="container mx-auto px-4 max-w-4xl mt-16">
+    <section className="min-h-screen bg-base-200 p-4">
+      <header className="container mx-auto px-4 max-w-4xl mt-16">
         <div className="card bg-base-100 shadow-xl">
           <div className="card-body p-4 md:p-6">
             <div className="flex flex-col md:flex-row gap-4 md:gap-6 items-center md:items-start">
@@ -74,11 +74,11 @@ export default function UserProfile() {
 
             <div className="divider mt-8">Publications</div>
             <div className="mt-4">
-              <OtherUserPosts user={user} />
+              <UserPosts user={user} />
             </div>
           </div>
         </div>
-      </div>
-    </div>
+      </header>
+    </section>
   );
 }

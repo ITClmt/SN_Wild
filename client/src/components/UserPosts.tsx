@@ -2,9 +2,10 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import DeletePost from "./DeletePost";
 import AddPostModal from "./AddPostModal";
-
+import { useUser } from "../context/UserContext";
 export default function UserPosts({ user }: { user: UserType }) {
   const [posts, setPosts] = useState([] as PostType[]);
+  const { user: currentUser } = useUser();
 
   // Fonction pour rendre les liens cliquables
   const renderTextWithLinks = (text: string) => {
@@ -59,7 +60,9 @@ export default function UserPosts({ user }: { user: UserType }) {
     <section className="p-4">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-2xl font-bold">Posts de {user.username}</h2>
-        <AddPostModal user={user} setPosts={setPosts} />
+        {currentUser?.id === user.id && (
+          <AddPostModal user={user} setPosts={setPosts} />
+        )}
       </div>
       <ul className="space-y-4">
         {posts.map((post) => (
@@ -77,7 +80,9 @@ export default function UserPosts({ user }: { user: UserType }) {
                 })}`}
               </span>
 
-              <DeletePost posts={posts} setPosts={setPosts} />
+              {currentUser?.id === post.user_id && (
+                <DeletePost posts={posts} setPosts={setPosts} />
+              )}
             </div>
 
             <div className="card-body">

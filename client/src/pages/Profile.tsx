@@ -58,8 +58,8 @@ export default function Profile() {
   }
 
   return (
-    <div className="min-h-screen bg-base-200 p-4">
-      <div className="container mx-auto px-4 max-w-4xl mt-16">
+    <section className="min-h-screen bg-base-200 p-4">
+      <header className="container mx-auto px-4 max-w-4xl mt-16">
         {/* Profile Card */}
         <div className="card bg-base-100 shadow-xl">
           <div className="card-body p-4 md:p-6">
@@ -250,7 +250,7 @@ export default function Profile() {
             </div>
           </div>
         </div>
-      </div>
-    </div>
+      </header>
+    </section>
   );
 }
