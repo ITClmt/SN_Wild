@@ -6,7 +6,7 @@ interface UserType {
   bio?: string;
   profile_picture?: string;
   website?: string;
-  role: string;
+  is_admin: boolean;
 }
 
 interface PostType {

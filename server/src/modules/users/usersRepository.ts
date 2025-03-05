@@ -25,7 +25,7 @@ class UsersRepository {
   // 🔹 Récupérer un utilisateur par son ID
   async findUserById(id: number) {
     const [rows] = await db.query<User[]>(
-      "SELECT id, email, username, bio, profile_picture, website FROM users WHERE id = ?",
+      "SELECT id, email, username, bio, profile_picture, website, is_admin FROM users WHERE id = ?",
       [id],
     );
     return rows.length ? rows[0] : null;

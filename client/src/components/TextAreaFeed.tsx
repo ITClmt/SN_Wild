@@ -28,7 +28,7 @@ export default function TextAreaFeed({ user, setPosts }: TextAreaFeedProps) {
         className="flex items-center justify-between bg-base-100 rounded-lg p-4"
         onSubmit={handleSubmit(onSubmit)}
       >
-        <Link to={"/profile"} className="mr-4">
+        <Link to={`/profile/${user?.id}`} className="mr-4">
           <img
             src={
               user?.profile_picture ||

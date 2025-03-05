@@ -32,7 +32,7 @@ export default function LoginForm() {
       );
 
       login(response.data.user);
-      navigate("/profile");
+      navigate(`/profile/${response.data.user.id}`);
     } catch (error) {
       if ((error as AxiosError)?.response?.status === 401) {
         setError("Identifiants invalides");

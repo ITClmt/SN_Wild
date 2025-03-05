@@ -80,7 +80,7 @@ export default function UserPosts({ user }: { user: UserType }) {
                 })}`}
               </span>
 
-              {currentUser?.id === post.user_id && (
+              {(currentUser?.is_admin || currentUser?.id === post.user_id) && (
                 <DeletePost posts={posts} setPosts={setPosts} />
               )}
             </div>

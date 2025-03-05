@@ -5,6 +5,7 @@ import jwt from "jsonwebtoken";
 interface JwtPayload {
   id: number;
   username: string;
+  isAdmin: boolean;
 }
 
 // Étend l'objet `Request` d'Express pour inclure `user`
@@ -14,7 +15,7 @@ declare module "express-serve-static-core" {
   }
 }
 
-export const authenticateToken: RequestHandler = (req, res, next) => {
+const authenticateToken: RequestHandler = (req, res, next) => {
   const token = req.cookies.token;
 
   if (!token) {
@@ -35,4 +36,12 @@ export const authenticateToken: RequestHandler = (req, res, next) => {
   }
 };
 
-export default authenticateToken;
+const isAdmin: RequestHandler = (req, res, next) => {
+  if (!req.user || !req.user.isAdmin) {
+    res.status(403).json({ message: "Access denied. Admin required." });
+    return;
+  }
+  next();
+};
+
+export default { authenticateToken, isAdmin };

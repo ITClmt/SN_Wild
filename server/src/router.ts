@@ -1,5 +1,7 @@
 import express from "express";
-import { authenticateToken } from "./modules/auth/authMiddleware";
+import authMiddleware, {
+  authenticateToken,
+} from "./modules/auth/authMiddleware";
 const router = express.Router();
 
 /* ************************************************************************* */
@@ -28,17 +30,17 @@ router.post("/api/auth/logout", usersController.logoutController);
 router.get("/api/users", usersController.browseUsersController);
 router.get(
   "/api/users/me",
-  authenticateToken,
+  authMiddleware.authenticateToken,
   usersController.getUserProfileController,
 );
 router.put(
   "/api/users/me",
-  authenticateToken,
+  authMiddleware.authenticateToken,
   usersController.editUserProfileController,
 );
 router.delete(
   "/api/users/me",
-  authenticateToken,
+  authMiddleware.authenticateToken,
   usersController.removeUserController,
 );
 
@@ -47,15 +49,19 @@ import postController from "./modules/posts/postController";
 
 router.get("/api/posts", postController.browsePostsController);
 router.get("/api/posts/:id", postController.readPostController);
-router.post("/api/posts", authenticateToken, postController.addPostController);
+router.post(
+  "/api/posts",
+  authMiddleware.authenticateToken,
+  postController.addPostController,
+);
 router.put(
   "/api/posts/:id",
-  authenticateToken,
+  authMiddleware.authenticateToken,
   postController.editPostController,
 );
 router.delete(
   "/api/posts/:id",
-  authenticateToken,
+  authMiddleware.isAdmin,
   postController.removePostController,
 );
 
