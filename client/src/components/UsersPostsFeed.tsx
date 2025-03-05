@@ -75,7 +75,7 @@ export default function UsersPostsFeed({
             </div>
 
             {/* Post Content */}
-            <div className="mt-3 text-base-content/90 text-lg whitespace-pre-wrap break-all">
+            <div className="mt-3 text-base-content/90 text-lg whitespace-pre-wrap break-words">
               {renderTextWithLinks(post.content)}
             </div>
 

@@ -16,7 +16,6 @@ import Signup from "./pages/Signup";
 import Feed from "./pages/Feed";
 import UserProfile from "./pages/UserProfile";
 import Login from "./pages/Login";
-import Profile from "./pages/Profile";
 
 /* ************************************************************************* */
 
@@ -32,10 +31,6 @@ const router = createBrowserRouter([
       {
         path: "/",
         element: <FirstPage />,
-      },
-      {
-        path: "/profile",
-        element: <Profile />,
       },
       {
         path: "/feed",

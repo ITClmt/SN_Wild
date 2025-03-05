@@ -87,7 +87,7 @@ export default function UserPosts({ user }: { user: UserType }) {
 
             <div className="card-body">
               <div className="flex justify-between items-center">
-                <p className="text-base-content whitespace-pre-wrap break-all">
+                <p className="text-base-content whitespace-pre-wrap break-words">
                   {renderTextWithLinks(post.content)}
                 </p>
               </div>

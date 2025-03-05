@@ -6,7 +6,7 @@ import LoginForm from "../components/LoginForm";
 export default function Login() {
   const { user, isAuthenticated } = useUser();
   if (isAuthenticated || user) {
-    return <Navigate to="/profile" />;
+    return <Navigate to={`/profile/${user?.id}`} />;
   }
 
   return (

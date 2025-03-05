@@ -6,7 +6,7 @@ import { useUser } from "../context/UserContext";
 export default function Signup() {
   const { user, isAuthenticated } = useUser();
   if (isAuthenticated || user) {
-    return <Navigate to="/profile" />;
+    return <Navigate to={`/profile/${user?.id}`} />;
   }
   return (
     <section className="flex flex-col items-center justify-center h-screen font-poppins">
