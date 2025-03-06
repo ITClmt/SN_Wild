@@ -83,11 +83,11 @@ export default function UsersPostsFeed({
             <div className="flex gap-2 mt-3">
               <button type="button" className="btn btn-ghost btn-xs gap-1">
                 <LuHeart className="h-4 w-4" />
-                <span className="text-xs">0</span>
+                <span className="text-xs">{post.likes_count}</span>
               </button>
               <button type="button" className="btn btn-ghost btn-xs gap-1">
                 <LuMessageCircle className="h-4 w-4" />
-                <span className="text-xs">0</span>
+                <span className="text-xs">{post.comments_count}</span>
               </button>
             </div>
           </div>

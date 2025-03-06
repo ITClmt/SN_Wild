@@ -3,6 +3,9 @@ import axios from "axios";
 import DeletePost from "./DeletePost";
 import AddPostModal from "./AddPostModal";
 import { useUser } from "../context/UserContext";
+import { LuHeart } from "react-icons/lu";
+import { LuMessageCircle } from "react-icons/lu";
+
 export default function UserPosts({ user }: { user: UserType }) {
   const [posts, setPosts] = useState([] as PostType[]);
   const { user: currentUser } = useUser();
@@ -91,6 +94,17 @@ export default function UserPosts({ user }: { user: UserType }) {
                   {renderTextWithLinks(post.content)}
                 </p>
               </div>
+            </div>
+            {/* Post Actions */}
+            <div className="flex gap-2 p-2">
+              <button type="button" className="btn btn-ghost btn-xs gap-1">
+                <LuHeart className="h-4 w-4" />
+                <span className="text-xs">{post.likes_count}</span>
+              </button>
+              <button type="button" className="btn btn-ghost btn-xs gap-1">
+                <LuMessageCircle className="h-4 w-4" />
+                <span className="text-xs">{post.comments_count}</span>
+              </button>
             </div>
           </li>
         ))}

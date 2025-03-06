@@ -13,9 +13,12 @@ class PostRepository {
   // 🔹 Récupérer tous les posts
   async getAllPosts(): Promise<Post[]> {
     const [rows] = await db.query<RowDataPacket[]>(`
-    SELECT posts.*, users.username 
+    SELECT posts.*, users.username, users.profile_picture, COUNT(likes.id) AS likes_count, COUNT(comments.id) AS comments_count
     FROM posts 
     JOIN users ON posts.user_id = users.id
+    LEFT JOIN likes ON posts.id = likes.post_id
+    LEFT JOIN comments ON posts.id = comments.post_id
+    GROUP BY posts.id
     ORDER BY posts.created_at DESC
   `);
     return rows as Post[];
@@ -24,7 +27,7 @@ class PostRepository {
   // 🔹 Récupérer un post par ID
   async getPostById(id: number): Promise<Post | null> {
     const [rows] = await db.query<RowDataPacket[]>(
-      "SELECT posts.*, users.username FROM posts JOIN users ON posts.user_id = users.id WHERE posts.id = ?",
+      "SELECT posts.*, users.username, users.profile_picture, COUNT(likes.id) AS likes_count, COUNT(comments.id) AS comments_count FROM posts JOIN users ON posts.user_id = users.id LEFT JOIN likes ON posts.id = likes.post_id LEFT JOIN comments ON posts.id = comments.post_id WHERE posts.id = ? GROUP BY posts.id",
       [id],
     );
     return rows.length ? (rows[0] as Post) : null;

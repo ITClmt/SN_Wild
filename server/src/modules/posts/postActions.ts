@@ -37,13 +37,10 @@ const editPost = async (postId: number, userId: number, content: string) => {
 };
 
 // 🔹 Supprimer un post
-const removePost = async (postId: number, userId: number) => {
+const removePost = async (postId: number) => {
   const post = await postRepository.getPostById(postId);
   if (!post) {
     throw new Error("Post not found.");
-  }
-  if (post.user_id !== userId) {
-    throw new Error("Unauthorized.");
   }
   await postRepository.deletePost(postId);
   return { message: "Post deleted successfully!" };

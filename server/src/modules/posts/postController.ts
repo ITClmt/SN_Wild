@@ -68,14 +68,7 @@ const editPostController: RequestHandler = async (req, res) => {
 // 🔹 Supprimer un post
 const removePostController: RequestHandler = async (req, res) => {
   try {
-    if (!req.user) {
-      res.status(401).json({ message: "Unauthorized" });
-      return;
-    }
-    const response = await postActions.removePost(
-      Number(req.params.id),
-      req.user.id,
-    );
+    const response = await postActions.removePost(Number(req.params.id));
     res.json(response);
   } catch (error) {
     if (error instanceof Error) {

@@ -1,7 +1,4 @@
 import express from "express";
-import authMiddleware, {
-  authenticateToken,
-} from "./modules/auth/authMiddleware";
 const router = express.Router();
 
 /* ************************************************************************* */
@@ -12,6 +9,7 @@ const router = express.Router();
 import usersController from "./modules/users/usersController";
 import validateLoginForm from "./modules/Middleware/loginForm";
 import validateSignupForm from "./modules/Middleware/signupForm";
+import authMiddleware from "./modules/auth/authMiddleware";
 
 router.post(
   "/api/auth/signup",
@@ -59,11 +57,7 @@ router.put(
   authMiddleware.authenticateToken,
   postController.editPostController,
 );
-router.delete(
-  "/api/posts/:id",
-  authMiddleware.isAdmin,
-  postController.removePostController,
-);
+router.delete("/api/posts/:id", postController.removePostController);
 
 // 🔹 Item routes
 // Define item-related routes

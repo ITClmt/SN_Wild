@@ -10,6 +10,8 @@ interface UserType {
 }
 
 interface PostType {
+  comments_count: ReactNode;
+  likes_count: ReactNode;
   id: number;
   content: string;
   created_at: string;
